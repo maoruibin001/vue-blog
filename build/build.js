@@ -1,5 +1,5 @@
-require('./check-versions')()
-
+// require('./check-versions')()
+console.time('timeTest:')
 process.env.NODE_ENV = 'production'
 
 var ora = require('ora')
@@ -31,5 +31,7 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
       '  Tip: built files are meant to be served over an HTTP server.\n' +
       '  Opening index.html over file:// won\'t work.\n'
     ))
+
+    console.timeEnd('timeTest:')
   })
 })

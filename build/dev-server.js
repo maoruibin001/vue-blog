@@ -1,5 +1,4 @@
-require('./check-versions')()
-
+// require('./check-versions')()
 var config = require('../config')
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
@@ -73,9 +72,8 @@ module.exports = app.listen(port, function (err) {
     console.log(err)
     return
   }
-
   // when env is testing, don't need open it
   if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
-    opn(uri)
+    // opn(uri)
   }
 })
