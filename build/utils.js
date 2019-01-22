@@ -16,7 +16,7 @@ exports.cssLoaders = function (options) {
   var cssLoader = {
     loader: 'css-loader',
     options: {
-      minimize: process.env.NODE_ENV === 'production',
+      // minimize: process.env.NODE_ENV === 'production', //此处需要去掉，否则会报错。
       sourceMap: options.sourceMap
     }
   }

@@ -1,37 +1,46 @@
 <template>
   <div id="app">
-    <fire-canvas class="fire"></fire-canvas>
-    <router-view></router-view>
-    <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
-        <dialog-box v-if="dialog.show"></dialog-box>
+    <fire-canvas class="fire" />
+    <router-view />
+    <spinner />
+    <transition
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
+    >
+      <dialog-box v-if="dialog.show" />
     </transition>
   </div>
 </template>
 
 <script>
-import FireCanvas   from './components/share/FireCanvas'
-import spinner      from './components/share/spinner'
-import DialogBox    from './components/share/DialogBox'
-import {mapState}   from 'vuex'
-
+import FireCanvas from './components/share/FireCanvas'
+import spinner from './components/share/spinner'
+import DialogBox from './components/share/DialogBox'
+import { debounce } from 'lib/utils'
+import {
+    mapState
+} from 'vuex'
 export default {
-    mounted () {
-        document.addEventListener('visibilitychange', this.changeTitle, false)
-    },
     components: {
         FireCanvas,
         spinner,
         DialogBox
     },
+    mounted () {
+        window.onresize = debounce(() => {
+            window.location.reload()
+        }, 200)
+        document.addEventListener('visibilitychange', this.changeTitle, false)
+    },
     computed: {
         ...mapState(['isLoading', 'dialog'])
     },
     methods: {
-        changeTitle () {            // 切换标签页后，改变title
+        changeTitle () { // 切换标签页后，改变title
             if (document.hidden) {
-                document.title = '去吧，皮卡丘！'
+                document.title = 'Go ahead, Pikachu'
             } else {
-                document.title = '欢迎回来'
+                document.title = 'welcome to back again'
             }
         }
     }

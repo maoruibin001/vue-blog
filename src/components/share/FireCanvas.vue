@@ -1,5 +1,5 @@
 <template>
-    <canvas id="particle"></canvas>
+  <canvas id="particle" />
 </template>
 
 <script>
@@ -11,33 +11,28 @@ export default {
         const ch = window.innerHeight
         canvas.width = cw
         canvas.height = ch
-
-        let particleArr = []             // 放置放光点的数组
+        const particleArr = [] // 放置放光点的数组
         let active = true
         let startColor = [154, 235, 21, 224]
         let endColor = [176, 179, 20, 53]
-        let colorRandom = [47, 47, 42, 0]
-
+        const colorRandom = [47, 47, 42, 0]
         const maxParticle = 216
-        const size = 48                     // 发光点的大小
-        const sizeRandom = 64               // 发光点的随机增量
-        const sharpness = 0                 // 发光点内部放射圆的百分比
+        const size = 48 // 发光点的大小
+        const sizeRandom = 64 // 发光点的随机增量
+        const sharpness = 0 // 发光点内部放射圆的百分比
         const sharpnessRandom = 11
         const speed = 11
         const speedRandom = 1.5
         const angle = 180
-        const xRandom = 80                  // 发光点位置的随机增量
+        const xRandom = 80 // 发光点位置的随机增量
         const yRandom = 50
-        const timesUpdate = 23              // 发光点增加到指定颜色的次数
+        const timesUpdate = 23 // 发光点增加到指定颜色的次数
         const timesUpdateRandom = 7
         const gravityY = -0.5
-        const emitNums = 3                 // 控制一次产生发光点的个数
-
+        const emitNums = 3 // 控制一次产生发光点的个数
         let timer
-
-//        let mouseX = cw * 3 / 5
-//        let mouseY = ch * 2 / 3
-
+        //        let mouseX = cw * 3 / 5
+        //        let mouseY = ch * 2 / 3
         let mouseX
         let mouseY = 4 * ch / 5
         const mxMove = () => {
@@ -50,11 +45,9 @@ export default {
             }
         }
         mxMove()
-
         function random (min, max) {
             return Math.random() * (max - min) + min
         }
-
         // 每个发光点的信息
         function Particle (mx, my) {
             this.size = size + sizeRandom * random(-1, 1)
@@ -89,7 +82,6 @@ export default {
             ]
             this.drawColor = ''
         }
-
         // 更新颜色，将startColor增加到endColor
         function update () {
             const rate = 1 / emitNums
@@ -114,7 +106,7 @@ export default {
                     current.color[1] += current.deltaColor[1]
                     current.color[2] += current.deltaColor[2]
                     current.color[3] += current.deltaColor[3]
-                    let newcolor = []
+                    const newcolor = []
                     newcolor[0] = current.color[0] > 255 ? 255 : current.color[0] < 0 ? 0 : current.color[0].toFixed(0)
                     newcolor[1] = current.color[1] > 255 ? 255 : current.color[1] < 0 ? 0 : current.color[1].toFixed(0)
                     newcolor[2] = current.color[2] > 255 ? 255 : current.color[2] < 0 ? 0 : current.color[2].toFixed(0)
@@ -126,7 +118,6 @@ export default {
                 }
             }
         }
-
         // 将particleArr数组画出来
         function draw () {
             for (let i = 0; i < particleArr.length - 1; i++) {
@@ -143,7 +134,6 @@ export default {
                 ctx.globalCompositeOperation = 'lighter'
             }
         }
-
         // 开始动画循环
         function loop () {
             update()
@@ -151,13 +141,11 @@ export default {
             draw()
             setTimeout(loop, 80)
         }
-
         window.addEventListener('mousemove', function (e) {
             clearTimeout(timer)
             mouseX = e.clientX - canvas.offsetLeft
             mouseY = e.clientY - canvas.offsetTop
         })
-
         window.addEventListener('click', function () {
             active = !active
             startColor = []
@@ -166,10 +154,10 @@ export default {
                 startColor.push(random(0, 255))
                 endColor.push(random(0, 255))
             }
-//            获取喜欢的颜色，设置在起始数据
-//            console.log('startColor: ' + startColor)
-//            console.log('endColor: ' + endColor)
-//            console.log('colorRandom: ' + colorRandom)
+            //            获取喜欢的颜色，设置在起始数据
+            //            console.log('startColor: ' + startColor)
+            //            console.log('endColor: ' + endColor)
+            //            console.log('colorRandom: ' + colorRandom)
         })
         window.addEventListener('mouseout', function () {
             const mxMove = () => {

@@ -1,23 +1,34 @@
 <template>
-    <div class="wrapper">
-        <div class="login">
-            <i class="iconfont icon-icon69"></i>
-            <div>
-                <input type="text" placeholder="请输入你的账号" v-model="name"/>
-                <i class="iconfont icon-zhanghu"></i>
-            </div>
-            <div>
-                <input type="password" placeholder="请输入你的密码" v-model="password" @keydown.enter="confirm(name, password)"/>
-                <i class="iconfont icon-yuechi"></i>
-            </div>
-            <p>{{info}}</p>
-            <button @click="confirm(name, password)"><span>登录</span></button>
-        </div>
+  <div class="wrapper">
+    <div class="login">
+      <i class="iconfont icon-icon69" />
+      <div>
+        <input
+          v-model="name"
+          type="text"
+          placeholder="请输入你的账号"
+        >
+        <i class="iconfont icon-zhanghu" />
+      </div>
+      <div>
+        <input
+          v-model="password"
+          type="password"
+          placeholder="请输入你的密码"
+          @keydown.enter="confirm(name, password)"
+        >
+        <i class="iconfont icon-yuechi" />
+      </div>
+      <p>{{ info }}</p>
+      <button @click="confirm(name, password)">
+        <span>登录</span>
+      </button>
     </div>
+  </div>
 </template>
 
 <script>
-import {mapActions, mapMutations}       from 'vuex'
+import { mapActions, mapMutations }       from 'vuex'
 export default {
     data () {
         return {
@@ -30,10 +41,10 @@ export default {
         ...mapActions(['login']),
         ...mapMutations(['set_user']),
         confirm (name, password) {
-            this.login({name: name, password: password}).then((res) => {
+            this.login({ name: name, password: password }).then((res) => {
                 this.info = '正在登录中...'
                 this.set_user(res.data)
-                this.$router.push({name: 'posts'})
+                this.$router.push({ name: 'posts' })
             }).catch((err) => {
                 console.log(err)
                 this.info = '登录失败， 请重新登录'

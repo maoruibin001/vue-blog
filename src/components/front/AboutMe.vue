@@ -1,22 +1,52 @@
 <template>
-    <div id="contact">
-        <a href="#about_me" class="title animated bounceIn">
-            <p class="headline" id="about_me">About me</p>
+  <div id="contact">
+    <a
+      href="#about_me"
+      class="title animated bounceIn"
+    >
+      <p
+        id="about_me"
+        class="headline"
+      >
+        About me
+      </p>
+    </a>
+    <div class="info animated tada">
+      <img
+        src="../../../static/me.jpg"
+        alt="me"
+      >
+      <div class="wraper">
+        <p class="left">
+          邮箱:
+        </p><p class="right">
+          xuhaodong66@gmail.com
+        </p>
+        <p class="left">
+          QQ:
+        </p><p class="right">
+          3552116732
+        </p>
+        <p class="left">
+          学校:
+        </p><p class="right">
+          广州大学大三在校生
+        </p>
+        <p class="left">
+          在线简历:
+        </p><a
+          class="right"
+          href="https://job.xuhaodong.cn"
+        >
+          job.xuhaodong.cn
         </a>
-        <div class="info animated tada">
-            <img src="../../../static/me.jpg" alt="me"/>
-            <div class="wraper">
-                <p class="left">邮箱:</p><p class="right">xuhaodong66@gmail.com</p>
-                <p class="left">QQ:</p><p class="right">3552116732</p>
-                <p class="left">学校:</p><p class="right">广州大学大三在校生</p>
-                <p class="left">在线简历:</p><a class="right" href="https://job.xuhaodong.cn">job.xuhaodong.cn</a>
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-import {mapMutations} from 'vuex'
+import { mapMutations } from 'vuex'
 export default {
     created () {
         this.set_headline({

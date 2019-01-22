@@ -14,8 +14,8 @@ renderer.heading = function (text, level) {
 export default {
     reducedArticles: (state) => {
         const articles = state.articles.map(article => {
-            let newArticle = {}
-            for (let i in article) { newArticle[i] = article[i] }
+            const newArticle = {}
+            for (const i in article) { newArticle[i] = article[i] }
             newArticle.content = marked(article.content || '').replace(/<[^>]*>/g, '').slice(0, 200) + '......'
             return newArticle
         })
@@ -30,7 +30,7 @@ export default {
         if (strHtml) {
             const Re = /<h(\d) id="(.*?)">/g
             let arr = Re.exec(strHtml)
-            let list = []
+            const list = []
             let index = 0
             const sizeTop = arr[1]
             list.push({

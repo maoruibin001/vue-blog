@@ -1,16 +1,12 @@
 <template>
-    <div class="loading">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
+  <div class="loading">
+    <span />
+    <span />
+    <span />
+    <span />
+    <span />
+  </div>
 </template>
-
-<script>
-
-</script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
     .loading{

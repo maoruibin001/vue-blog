@@ -1,20 +1,35 @@
 <template>
-    <div id="wrapper">
-        <my-header></my-header>
-        <router-view class="content" v-show="!isLoading"></router-view>
-        <spinner v-show="isLoading"></spinner>
-        <transition name="huojian" enter-active-class="animated bounceIn" leave-active-class="animated fadeOut">
-            <a href="#app" class="rocket"><i class="iconfont icon-huojian" v-if="show"></i></a>
-        </transition>
-        <my-footer></my-footer>
-    </div>
+  <div id="wrapper">
+    <my-header />
+    <router-view
+      v-show="!isLoading"
+      class="content"
+    />
+    <spinner v-show="isLoading" />
+    <transition
+      name="huojian"
+      enter-active-class="animated bounceIn"
+      leave-active-class="animated fadeOut"
+    >
+      <a
+        href="#app"
+        class="rocket"
+      >
+        <i
+          v-if="show"
+          class="iconfont icon-huojian"
+        />
+      </a>
+    </transition>
+    <my-footer />
+  </div>
 </template>
 
 <script>
 import MyHeader         from './component/MyHeader'
 import MyFooter         from './component/MyFooter'
 import spinner          from '../share/spinner'
-import {mapState}       from 'vuex'
+import { mapState }       from 'vuex'
 
 export default {
     data () {

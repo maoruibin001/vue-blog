@@ -2,12 +2,13 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
-
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
 module.exports = {
+  mode: 'none',
   entry: {
     app: './src/index.js'
   },
@@ -23,19 +24,32 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      'lib': resolve('src/lib'),
+    }
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          name: "commons",
+          chunks: "initial",
+          minChunks: 2
+        }
+      }
     }
   },
   module: {
     rules: [
-      // {
-      //   test: /\.(js|vue)$/,
-      //   loader: 'eslint-loader',
-      //   enforce: "pre",
-      //   include: [resolve('src'), resolve('test')],
-      //   options: {
-      //     formatter: require('eslint-friendly-formatter')
-      //   }
-      // },
+      {
+        test: /\.(js|vue)$/,
+        loader: 'eslint-loader',
+        enforce: "pre",
+        include: [resolve('src'), resolve('test')],
+        options: {
+          formatter: require('eslint-friendly-formatter'),
+          emitWarning: false
+        }
+      },
       {
         test: /\.vue$/,
         loader: 'vue-loader',
@@ -66,5 +80,9 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    // make sure to include the plugin for the magic
+    new VueLoaderPlugin()
+],
 }

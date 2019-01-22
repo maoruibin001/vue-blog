@@ -1,36 +1,42 @@
 <template>
-    <div class="wrapper">
-        <p>所有文章</p>
-        <article-content v-on:addPage="nextPage" v-on:dropPage="prePage"></article-content>
-        <router-link
-                :to="{name: 'editor'}"
-                class="addPost" tag="button"
-        ><span>添加文章</span></router-link>
-    </div>
+  <div class="wrapper">
+    <p>所有文章</p>
+    <article-content
+      @addPage="nextPage"
+      @dropPage="prePage"
+    />
+    <router-link
+      :to="{name: 'editor'}"
+      class="addPost"
+      tag="button"
+    >
+      <span>添加文章</span>
+    </router-link>
+  </div>
 </template>
 
 <script>
-import {mapActions, mapState}   from 'vuex'
+import { mapActions, mapState }   from 'vuex'
 import ArticleContent           from './component/ArticleContent'
 
 export default {
-    created () {
-        this.getAllArticles({page: this.page, limit: 8})
-    },
     data () {
         return {
             page: 1
         }
     },
+    created () {
+        this.getAllArticles({ page: this.page, limit: 8 })
+    },
     methods: {
         ...mapActions(['getAllArticles']),
         nextPage () {
             this.page++
-            this.getAllArticles({page: this.page, limit: 8})
+            this.getAllArticles({ page: this.page, limit: 8 })
         },
         prePage () {
             this.page--
-            this.getAllArticles({page: this.page, limit: 8})
+            this.getAllArticles({ page: this.page, limit: 8 })
         }
     },
     computed: {

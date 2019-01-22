@@ -1,21 +1,45 @@
 <template>
-    <div class="contact">
-        <a href="#callMe" class="title animated bounceIn">
-            <p class="headline" id="callMe">Contact me</p>
-        </a>
-        <div class="email animated fadeIn">
-            <input type="text" placeholder=" 邮件主题" v-model="subject"/>
-            <input type="text" placeholder=" 邮箱" v-model="address"/>
-            <textarea placeholder=" 来唠唠嗑呗" spellcheck="false" v-model="content"></textarea>
-            <button class="sendEmail" @click="send" :disabled="sendFlag">
-                <span>{{sendFlag ? '发送中...' : '确认'}}</span>
-            </button>
-        </div>
+  <div class="contact">
+    <a
+      href="#callMe"
+      class="title animated bounceIn"
+    >
+      <p
+        id="callMe"
+        class="headline"
+      >
+        Contact me
+      </p>
+    </a>
+    <div class="email animated fadeIn">
+      <input
+        v-model="subject"
+        type="text"
+        placeholder=" 邮件主题"
+      >
+      <input
+        v-model="address"
+        type="text"
+        placeholder=" 邮箱"
+      >
+      <textarea
+        v-model="content"
+        placeholder=" 来唠唠嗑呗"
+        spellcheck="false"
+      />
+      <button
+        class="sendEmail"
+        :disabled="sendFlag"
+        @click="send"
+      >
+        <span>{{ sendFlag ? '发送中...' : '确认' }}</span>
+      </button>
     </div>
+  </div>
 </template>
 
 <script>
-import {mapMutations, mapActions} from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 export default {
     data () {
         return {

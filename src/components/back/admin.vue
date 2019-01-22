@@ -1,31 +1,62 @@
 <template>
-    <div class="wrapper">
-        <div class="statusLine">
-            <p class="left">
-                <router-link :to="{name: 'home'}" class="iconfont icon-zhuye" tag="i"></router-link>
-                <span>{{time}}好，{{name}}</span>
-            </p>
-            <p class="right"  @click="logout">
-                <i class="iconfont icon-out"></i>
-                <span>登出</span>
-            </p>
-        </div>
-        <nav>
-            <ul>
-                <router-link :to="{name: 'posts'}" tag="li"><i class="iconfont icon-biji-copy"></i>文章</router-link>
-                <router-link :to="{name: 'search'}" tag="li"><i class="iconfont icon-search"></i>搜索</router-link>
-                <router-link :to="{name: 'drafts'}" tag="li"><i class="iconfont icon-draft"></i>草稿</router-link>
-                <router-link :to="{name: 'account'}" tag="li"><i class="iconfont icon-zhanghu"></i>账户</router-link>
-            </ul>
-        </nav>
-        <transition mode="out-in" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
-            <router-view class="content"></router-view>
-        </transition>
+  <div class="wrapper">
+    <div class="statusLine">
+      <p class="left">
+        <router-link
+          :to="{name: 'home'}"
+          class="iconfont icon-zhuye"
+          tag="i"
+        />
+        <span>{{ time }}好，{{ name }}</span>
+      </p>
+      <p
+        class="right"
+        @click="logout"
+      >
+        <i class="iconfont icon-out" />
+        <span>登出</span>
+      </p>
     </div>
+    <nav>
+      <ul>
+        <router-link
+          :to="{name: 'posts'}"
+          tag="li"
+        >
+          <i class="iconfont icon-biji-copy" />文章
+        </router-link>
+        <router-link
+          :to="{name: 'search'}"
+          tag="li"
+        >
+          <i class="iconfont icon-search" />搜索
+        </router-link>
+        <router-link
+          :to="{name: 'drafts'}"
+          tag="li"
+        >
+          <i class="iconfont icon-draft" />草稿
+        </router-link>
+        <router-link
+          :to="{name: 'account'}"
+          tag="li"
+        >
+          <i class="iconfont icon-zhanghu" />账户
+        </router-link>
+      </ul>
+    </nav>
+    <transition
+      mode="out-in"
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
+    >
+      <router-view class="content" />
+    </transition>
+  </div>
 </template>
 
 <script>
-import {mapMutations, mapState}       from 'vuex'
+import { mapMutations, mapState }       from 'vuex'
 export default {
     computed: {
         ...mapState(['user']),
@@ -49,7 +80,7 @@ export default {
         ...mapMutations(['unset_user']),
         logout () {
             this.unset_user()
-            this.$router.go({name: 'login'})
+            this.$router.go({ name: 'login' })
         }
     }
 }

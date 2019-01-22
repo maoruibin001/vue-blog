@@ -1,18 +1,32 @@
 <template>
-<div class="dialog">
+  <div class="dialog">
     <div class="center">
-        <i class="iconfont icon-icon13" @click="close"></i>
-        <p><span>{{dialog.info}}</span></p>
-        <div class="choice">
-        <button class="sure" @click="confirm">确定</button>
-        <button class="cancel" v-if="dialog.hasTwoBtn" @click="cancel">取消</button>
-        </div>
+      <i
+        class="iconfont icon-icon13"
+        @click="close"
+      />
+      <p><span>{{ dialog.info }}</span></p>
+      <div class="choice">
+        <button
+          class="sure"
+          @click="confirm"
+        >
+          确定
+        </button>
+        <button
+          v-if="dialog.hasTwoBtn"
+          class="cancel"
+          @click="cancel"
+        >
+          取消
+        </button>
+      </div>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
-import {mapState, mapMutations}   from 'vuex'
+import { mapState, mapMutations }   from 'vuex'
 export default {
     computed: {
         ...mapState(['dialog'])

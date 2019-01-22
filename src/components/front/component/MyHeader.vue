@@ -1,35 +1,65 @@
 <template>
-    <div id="nav">
-        <div class="flexDiv">
-            <div class="search">
-                <input
-                        type="text"
-                        placeholder="搜索一下"
-                        v-model="text"
-                        @keydown.enter="search"
-                />
-                <i class="iconfont icon-search" @click="search"></i>
-            </div>
-            <nav>
-                <ul class="catalog">
-                    <router-link to="/home" tag="li">首页</router-link>
-                    <router-link to="/articles" tag="li">博客</router-link>
-                    <router-link to="/contact" tag="li">联系站长</router-link>
-                    <router-link to="/about" tag="li">关于我</router-link>
-                </ul>
-            </nav>
-        </div>
-        <div class="container">
-            <img src="../../../../static/sunset.jpg" alt="bgimage" class="bgImage"/>
-            <div :class="headline.animation" id="title">
-                {{headline.content}}
-            </div>
-        </div>
+  <div id="nav">
+    <div class="flexDiv">
+      <div class="search">
+        <input
+          v-model="text"
+          type="text"
+          placeholder="搜索一下"
+          @keydown.enter="search"
+        >
+        <i
+          class="iconfont icon-search"
+          @click="search"
+        />
+      </div>
+      <nav>
+        <ul class="catalog">
+          <router-link
+            to="/home"
+            tag="li"
+          >
+            首页
+          </router-link>
+          <router-link
+            to="/articles"
+            tag="li"
+          >
+            博客
+          </router-link>
+          <router-link
+            to="/contact"
+            tag="li"
+          >
+            联系站长
+          </router-link>
+          <router-link
+            to="/about"
+            tag="li"
+          >
+            关于我
+          </router-link>
+        </ul>
+      </nav>
     </div>
+    <div class="container">
+      <img
+        src="../../../../static/sunset.jpg"
+        alt="bgimage"
+        class="bgImage"
+      >
+      <div
+        id="title"
+        :class="headline.animation"
+      >
+        {{ headline.content }}
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
     data () {
         return {
@@ -40,7 +70,7 @@ export default {
     methods: {
         ...mapActions(['searchArticles']),
         search () {
-            this.$router.push({name: 'SearchResult', params: {text: this.text}, hash: '#search'})
+            this.$router.push({ name: 'SearchResult', params: { text: this.text }, hash: '#search' })
         }
     },
     watch: {

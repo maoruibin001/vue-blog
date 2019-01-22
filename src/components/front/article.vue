@@ -1,38 +1,65 @@
 <template>
-    <div class="wrapper" id="article">
-        <div id="content">
-            <h1 class="title animated fadeIn">{{article.title}}</h1>
-            <div class="appendInfo animated fadeIn">
-                <time>
-                    <i class="iconfont icon-shijian"></i>{{article.date | toDate}}
-                </time>
-                <span>
-                    <i class="iconfont icon-label"></i>{{article.tags | toTag}}
-                </span>
-                <a class="commentCount" href="#comment">
-                    <i class="iconfont icon-huifu"></i>{{article.comment_n}}
-                </a>
-            </div>
-            <article-list class="list animated fadeIn"></article-list>
-            <div class="content animated fadeIn" v-html="mdHtml"></div>
-            <div class="indexes animated fadeIn">
-                <div class="last animated fadeIn">
-                    <router-link :to="{name: 'article', params: {id: articles[prePage].aid, index: prePage, page: $route.params.page}, hash: '#article'}"  v-if="articles[prePage]" tag="p" class="left">
-                        <i class="iconfont icon-left"></i>{{articles[prePage].title}}</router-link>
-                    <router-link :to="{name: 'article', params: {id: articles[nextPage].aid, index: nextPage, page: $route.params.page}, hash: '#article'}" v-if="articles[nextPage]" tag="p" class="right">
-                        {{articles[nextPage].title}}<i class="iconfont icon-right"></i></router-link>
-                </div>
-            </div>
-            <article-comment class="comment animated fadeIn"></article-comment>
+  <div
+    id="article"
+    class="wrapper"
+  >
+    <div id="content">
+      <h1 class="title animated fadeIn">
+        {{ article.title }}
+      </h1>
+      <div class="appendInfo animated fadeIn">
+        <time>
+          <i class="iconfont icon-shijian" />{{ article.date | toDate }}
+        </time>
+        <span>
+          <i class="iconfont icon-label" />{{ article.tags | toTag }}
+        </span>
+        <a
+          class="commentCount"
+          href="#comment"
+        >
+          <i class="iconfont icon-huifu" />{{ article.comment_n }}
+        </a>
+      </div>
+      <article-list class="list animated fadeIn" />
+      <div
+        class="content animated fadeIn"
+        v-html="mdHtml"
+      />
+      <div class="indexes animated fadeIn">
+        <div class="last animated fadeIn">
+          <router-link
+            v-if="articles[prePage]"
+            :to="{name: 'article', params: {id: articles[prePage].aid, index: prePage, page: $route.params.page}, hash: '#article'}"
+            tag="p"
+            class="left"
+          >
+            <i class="iconfont icon-left" />{{ articles[prePage].title }}
+          </router-link>
+          <router-link
+            v-if="articles[nextPage]"
+            :to="{name: 'article', params: {id: articles[nextPage].aid, index: nextPage, page: $route.params.page}, hash: '#article'}"
+            tag="p"
+            class="right"
+          >
+            {{ articles[nextPage].title }}<i class="iconfont icon-right" />
+          </router-link>
         </div>
-        <router-link :to="{name: 'articles'}" class="iconfont icon-fanhui" tag="i"></router-link>
+      </div>
+      <article-comment class="comment animated fadeIn" />
     </div>
+    <router-link
+      :to="{name: 'articles'}"
+      class="iconfont icon-fanhui"
+      tag="i"
+    />
+  </div>
 </template>
 
 <script>
 import marked                                       from 'marked'
 import hljs                                         from 'highlight.js'
-import {mapState, mapActions}                       from 'vuex'
+import { mapState, mapActions }                       from 'vuex'
 import ArticleComment                               from './component/ArticleComment'
 import ArticleList                                  from './component/ArticleList'
 
@@ -69,9 +96,9 @@ export default {
             this.nextPage = 1
         } else if (to.params.index === this.articles.length - 1) {
             this.prePage = to.params.index - 1
-            this.getAllArticles({value: this.curTag, add: true, page: ++to.params.page})
+            this.getAllArticles({ value: this.curTag, add: true, page: ++to.params.page })
             this.nextPage = to.params.index + 1
-        } else if (to.hash && to.hash !== '#article') {   // 目录锚点跳转
+        } else if (to.hash && to.hash !== '#article') { // 目录锚点跳转
             to.params.page = from.params.page
             to.params.index = from.params.index
             this.prePage = to.params.index - 1
@@ -97,9 +124,9 @@ export default {
             if (index === 0) {
                 this.prePage = -1
                 this.nextPage = 1
-            } else if (index === this.articles.length - 1) {        // 加载更多文章
+            } else if (index === this.articles.length - 1) { // 加载更多文章
                 this.prePage = index - 1
-                this.getAllArticles({value: this.curTag, add: true, page: ++page})
+                this.getAllArticles({ value: this.curTag, add: true, page: ++page })
                 this.nextPage = index + 1
             } else {
                 this.prePage = index - 1
