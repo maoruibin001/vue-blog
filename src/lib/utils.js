@@ -12,6 +12,13 @@ export function debounce (fn, gapTime) {
         timer = setTimeout(fn.bind(this, ...arguments), gapTime)
     }
 }
+
+/**
+ * 日期格式化
+ * @param {Object} date new Date()
+ * @param {Object} options {formatStr(格式化返回字符串), YSplit(年月日的分隔符), HSplit(时分秒分隔符)}
+ * @returns {String}
+ */
 export function formatDate (date, options = {}) {
     const {
         formatStr = 'YMDhm', YSplit, HSplit
@@ -75,4 +82,34 @@ export function formatDate (date, options = {}) {
     }
 
     return yRets.length > 0 ? yRets.join('') + ' ' + hRets.join('') : hRets.join('')
+}
+/**
+ * 获取当地时间
+ * @param {Object} date
+ * @param {string} AP(上午下午) | All(完整)
+ * @returns {string}
+ */
+
+export function getLocalTime(date, flag) {
+    date = date || new Date();
+
+    let d = new Date(date);
+
+    let localAP = '';
+
+    const hours = new Date(d).getHours()
+    if (hours > 5 && hours < 12) {
+        localAP = '早上'
+    } else if (hours > 12 && hours < 19) {
+        localAP = '下午'
+    } else if (hours === 12) {
+        localAP = '中午'
+    } else {
+        localAP = '晚上'
+    }
+
+    switch (flag) {
+        case "AP" :
+            return localAP;
+    }
 }

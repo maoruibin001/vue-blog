@@ -2,7 +2,7 @@
     <div id="wrapper">
         <my-header />
         <router-view v-show="!isLoading" class="content" />
-        <spinner v-show="isLoading" />
+        <!-- <spinner v-show="isLoading" /> -->
         <transition name="huojian" enter-active-class="animated bounceIn" leave-active-class="animated fadeOut">
             <a href="#app" class="rocket">
                 <i v-if="show" class="iconfont icon-huojian" />
@@ -15,7 +15,7 @@
 <script>
     import MyHeader from './component/MyHeader'
     import MyFooter from './component/MyFooter'
-    import spinner from '../share/spinner'
+    // import spinner from '../share/spinner'
     import {
         mapState
     } from 'vuex'
@@ -39,7 +39,7 @@
         components: {
             MyHeader,
             MyFooter,
-            spinner
+            // spinner
         }
     }
 </script>

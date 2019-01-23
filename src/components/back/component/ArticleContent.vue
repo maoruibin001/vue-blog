@@ -23,14 +23,14 @@
         </tbody>
         <tfoot>
             <tr>
-                <td @click="prePage">
-                    上一页
+                <td>
+                    <span @click="prePage" v-if='page > 1'>上一页</span>
                 </td>
                 <td colspan="2">
                     第 {{ page }} 页
                 </td>
-                <td @click="nextPage">
-                    下一页
+                <td>
+                    <span @click="nextPage" v-if='!noMore'>下一页</span>
                 </td>
             </tr>
         </tfoot>
@@ -50,7 +50,7 @@
             }
         },
         computed: {
-            ...mapState(['articles', 'dialog'])
+            ...mapState(['articles', 'dialog', 'noMore'])
         },
         methods: {
             ...mapActions(['delArticle']),
@@ -64,7 +64,7 @@
                     alert('已经到第一页咯')
                 } else {
                     this.page--
-                        this.$emit('dropPage') // 传递给父组件
+                    this.$emit('dropPage') // 传递给父组件
                 }
             },
             deleteConfirm(aid) {

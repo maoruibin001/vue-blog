@@ -5,7 +5,7 @@
     <a href="http://www.facebook.com/fatdong1" class="iconfont icon-cion15" />
     <p>粤ICP备18603054239号</p>
     <p>
-      Copyright @ 2017 Powered by Vue. Designed by me |
+      Copyright @ 2019 Powered by Vue. |
       <router-link :to="{name: 'login'}" tag="span" class="login">
         站长登录
       </router-link>

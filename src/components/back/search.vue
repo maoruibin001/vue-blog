@@ -4,7 +4,7 @@
             <input v-model="text" type="text" :placeholder="tip" onfocus="this.placeholder=''" @keydown.enter="searchArticles({key: picked, value: text, page: page})">
             <i class="iconfont icon-search" @click="searchArticles({key: picked, value: text, page: page})" />
         </div>
-        <div class="searchString">
+        <!-- <div class="searchString">
             搜索匹配：
             <label for="title">
             <input
@@ -30,7 +30,7 @@
               value="date"
             >日期
           </label>
-        </div>
+        </div> -->
         <p>搜索结果</p>
         <article-content @addPage="nextPage" @dropPage="prePage" />
     </div>
@@ -66,22 +66,22 @@
             ...mapMutations(['set_all_articles']),
             nextPage() {
                 this.page++
-                    this.searchArticles({
-                        key: this.picked,
-                        value: this.text,
-                        page: this.page
-                    })
+                this.searchArticles({
+                    key: this.picked,
+                    value: this.text,
+                    page: this.page
+                })
             },
             prePage() {
                 if (!(this.page - 1)) {
                     alert('已经到第一页咯')
                 } else {
                     this.page--
-                        this.searchArticles({
-                            key: this.picked,
-                            value: this.text,
-                            page: this.page
-                        })
+                    this.searchArticles({
+                        key: this.picked,
+                        value: this.text,
+                        page: this.page
+                    })
                 }
             }
         },

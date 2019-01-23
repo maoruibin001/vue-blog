@@ -1,206 +1,170 @@
 <template>
-  <div class="wrapper">
-    <div class="title">
-      <input
-        v-model="title"
-        type="text"
-        placeholder="文章标题"
-        onfocus="this.placeholder=''"
-        onblur="this.placeholder='文章标题'"
-      >
+    <div class="wrapper">
+        <div class="title">
+            <input v-model="title" type="text" placeholder="文章标题" onfocus="this.placeholder=''" onblur="this.placeholder='文章标题'">
+        </div>
+        <div id="tags">
+            <tag-input v-for="(item, index) in tags" :key="index" :tags="tags" :index="index" />
+        </div>
+        <div class="info">
+            <div class="right">
+                <p :class="{active: isMarked}" @click="isMarked = true">
+                    原文
+                </p>
+                <p :class="{active: !isMarked}" @click="isMarked = false">
+                    预览
+                </p>
+            </div>
+            <textarea v-if="isMarked" id="editor" v-model="mdContent" v-focus spellcheck="false" @keydown.once.ctrl.13="saveDraft($route.query.aid)" />
+            <div v-if="!isMarked" v-focus class="preview animated fadeIn" tabIndex="1" v-html="mdHtml" />
+        </div>
+        <button class="publish" @click="saveArticle($route.query.aid)">
+          <span>发布文章</span>
+        </button>
+        <button class="draft" @click="saveDraft($route.query.aid)">
+          <span>存为草稿</span>
+        </button>
     </div>
-    <div id="tags">
-      <tag-input
-        v-for="(item, index) in tags"
-        :key="index"
-        :tags="tags"
-        :index="index"
-      />
-    </div>
-    <div class="info">
-      <div class="right">
-        <p
-          :class="{active: isMarked}"
-          @click="isMarked = true"
-        >
-          原文
-        </p>
-        <p
-          :class="{active: !isMarked}"
-          @click="isMarked = false"
-        >
-          预览
-        </p>
-      </div>
-      <textarea
-        v-if="isMarked"
-        id="editor"
-        v-model="mdContent"
-        v-focus
-        spellcheck="false"
-        @keydown.once.ctrl.13="saveDraft($route.query.aid)"
-      />
-      <div
-        v-if="!isMarked"
-        v-focus
-        class="preview animated fadeIn"
-        tabIndex="1"
-        v-html="mdHtml"
-      />
-    </div>
-    <button
-      class="publish"
-      @click="saveArticle($route.query.aid)"
-    >
-      <span>发布文章</span>
-    </button>
-    <button
-      class="draft"
-      @click="saveDraft($route.query.aid)"
-    >
-      <span>存为草稿</span>
-    </button>
-  </div>
 </template>
 
 <script>
-import marked from 'marked'
-import hljs from 'highlight.js'
-import {
-    mapMutations,
-    mapActions,
-    mapState
-} from 'vuex'
-import TagInput from './component/TagInput'
-marked.setOptions({
-    highlight: function (code) {
-        return hljs.highlightAuto(code).value
-    },
-    sanitize: true
-})
-const renderer = new marked.Renderer()
-renderer.heading = function (text, level) {
-    return '<a href="#' + text + '" class="hashTitle" data-scroll><h' + level +
+    import marked from 'marked'
+    import hljs from 'highlight.js'
+    import {
+        mapMutations,
+        mapActions,
+        mapState
+    } from 'vuex'
+    import TagInput from './component/TagInput'
+    marked.setOptions({
+        highlight: function(code) {
+            return hljs.highlightAuto(code).value
+        },
+        sanitize: true
+    })
+    const renderer = new marked.Renderer()
+    renderer.heading = function(text, level) {
+        return '<a href="#' + text + '" class="hashTitle" data-scroll><h' + level +
             ' id="' + text + '">' + text + '</h' + level + '></a>'
-}
-export default {
-    directives: {
-        focus: {
-            inserted: (el) => {
-                el.focus()
-            }
-        }
-    },
-    data () {
-        return {
-            isMarked: true,
-            firstUpdate: true,
-            isChange: false,
-            mdHtml: ''
-        }
-    },
-    created () {
-        const aid = this.$route.query.aid
-        this.isSaving_toggle(false)
-        if (aid) {
-            return this.getArticle(aid)
-        }
-        this.set_article({
-            content: '',
-            title: '',
-            tags: ['']
-        })
-    },
-    mounted () {
-        document.addEventListener('keydown', (e) => {
-            if (e.keyCode === 40 && e.ctrlKey) { //  ctrl + ↓ 切换
-                this.isMarked = !this.isMarked
-            }
-        })
-        this.mdContent = this.article.content
-    },
-    updated () {
-        // 因为切换预览模式，也会触发数据更新，所以不用beforeUpdate, 而用watch监听数据变化
-        if (this.firstUpdate) {
-            this.isChange = false
-        }
-        this.firstUpdate = false
-    },
-    computed: {
-        ...mapState(['article', 'isSaving', 'dialog']),
-        // mdContent: {
-        //     get() {
-        //         this.mdHtml = marked(this.article.content || '', {
-        //             renderer: renderer
-        //         })
-        //         return this.article.content
-        //     },
-        //     set(value) {
-        //         this.update_post_content(value)
-        //     }
-        // },
-        title: {
-            get () {
-                return this.article.title || ''
-            },
-            set (value) {
-                this.update_post_title(value)
-            }
-        },
-        tags () {
-            return this.article.tags
-        }
-    },
-    methods: {
-        ...mapMutations(['set_article', 'update_post_content', 'update_post_title', 'update_post_tags', 'isSaving_toggle', 'set_dialog']),
-        ...mapActions(['saveArticle', 'getArticle', 'saveDraft'])
-    },
-    components: {
-        TagInput
-    },
-    watch: {
-        title () {
-            this.isChange = true
-        },
-        tags () {
-            this.isChange = true
-        },
-        mdContent (value) {
-            this.mdHtml = marked(this.article.content || '', {
-                renderer: renderer
-            })
-            this.isChange = true
-            this.update_post_content(value)
-            setTimeout(() => { // 按下tab键后重新获得焦点
-                document.getElementById('editor').focus()
-            }, 0)
-        }
-    },
-    beforeRouteLeave (to, from, next) {
-        if (this.isChange && !this.isSaving) {
-            this.set_dialog({
-                info: '还没保存，确认离开(⊙o⊙)？',
-                hasTwoBtn: true,
-                show: true
-            })
-            new Promise((resolve, reject) => {
-                this.dialog.resolveFn = resolve
-                this.dialog.rejectFn = reject
-            }).then(
-                () => {
-                    next()
-                },
-                () => {
-                    next(false)
+    }
+    export default {
+        directives: {
+            focus: {
+                inserted: (el) => {
+                    el.focus()
                 }
-            ).catch((err) => {
-                console.log(err)
+            }
+        },
+        data() {
+            return {
+                isMarked: true,
+                firstUpdate: true,
+                isChange: false,
+                mdHtml: ''
+            }
+        },
+        created() {
+            const aid = this.$route.query.aid
+            this.isSaving_toggle(false)
+            if (aid) {
+                return this.getArticle(aid)
+            }
+            this.set_article({
+                content: '',
+                title: '',
+                tags: ['']
             })
-        } else {
-            next()
+        },
+        mounted() {
+            document.addEventListener('keydown', (e) => {
+                if (e.keyCode === 40 && e.ctrlKey) { //  ctrl + ↓ 切换
+                    this.isMarked = !this.isMarked
+                }
+            })
+            this.mdContent = this.article.content
+        },
+        updated() {
+            // 因为切换预览模式，也会触发数据更新，所以不用beforeUpdate, 而用watch监听数据变化
+            if (this.firstUpdate) {
+                this.isChange = false
+            }
+            this.firstUpdate = false
+        },
+        computed: {
+            ...mapState(['article', 'isSaving', 'dialog']),
+            // mdContent: {
+            //     get() {
+            //         this.mdHtml = marked(this.article.content || '', {
+            //             renderer: renderer
+            //         })
+            //         return this.article.content
+            //     },
+            //     set(value) {
+            //         this.update_post_content(value)
+            //     }
+            // },
+            title: {
+                get() {
+                    return this.article.title || ''
+                },
+                set(value) {
+                    this.update_post_title(value)
+                }
+            },
+            tags() {
+                return this.article.tags
+            }
+        },
+        methods: {
+            ...mapMutations(['set_article', 'update_post_content', 'update_post_title', 'update_post_tags', 'isSaving_toggle', 'set_dialog']),
+            ...mapActions(['saveArticle', 'getArticle', 'saveDraft'])
+        },
+        components: {
+            TagInput
+        },
+        watch: {
+            title() {
+                this.isChange = true
+            },
+            tags() {
+                this.isChange = true
+            },
+            mdContent(value) {
+                this.mdHtml = marked(this.article.content || '', {
+                    renderer: renderer
+                })
+                this.isChange = true
+                this.update_post_content(value)
+                setTimeout(() => { // 按下tab键后重新获得焦点
+                    document.getElementById('editor').focus()
+                }, 0)
+            }
+        },
+        beforeRouteLeave(to, from, next) {
+            if (this.isChange && !this.isSaving) {
+                this.set_dialog({
+                    info: '还没保存，确认离开(⊙o⊙)？',
+                    hasTwoBtn: true,
+                    show: true
+                })
+                new Promise((resolve, reject) => {
+                    this.dialog.resolveFn = resolve
+                    this.dialog.rejectFn = reject
+                }).then(
+                    () => {
+                        next()
+                    },
+                    () => {
+                        next(false)
+                    }
+                ).catch((err) => {
+                    console.log(err)
+                })
+            } else {
+                next()
+            }
         }
     }
-}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
