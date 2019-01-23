@@ -1,161 +1,120 @@
 <template>
-  <div class="container">
-    <section class="newBlog">
-      <a
-        href="#lastPost"
-        class="title animated bounceIn"
-      >
-        <p
-          id="lastPost"
-          class="headline"
-        >
-          最近更新
-        </p>
-      </a>
-      <div class="posts animated fadeIn">
-        <div class="flex">
-          <div
-            v-for="(article, index) in reducedArticles"
-            :key="index"
-            class="oneArticle"
-          >
-            <div class="option">
-              <time>{{ article.date | toDate }}</time>
-              <span class="commentNumber">
-                <i class="iconfont icon-huifu" />{{ article.comment_n }}
-              </span>
+    <div class="container">
+        <section class="newBlog">
+            <a href="#lastPost" class="title animated bounceIn">
+                <p id="lastPost" class="headline">
+                    最近更新
+                </p>
+            </a>
+            <div class="posts animated fadeIn">
+                <div class="flex">
+                    <div v-for="(article, index) in reducedArticles" :key="index" class="oneArticle">
+                        <div class="option">
+                            <time>{{ article.date | toDate }}</time>
+                            <span class="commentNumber">
+                    <i class="iconfont icon-huifu" />{{ article.comment_n }}
+                  </span>
+                        </div>
+                        <router-link :to="{name: 'article', params: {id: article.aid, index: index, page: 1}, hash: '#article'}" tag="p" exact class="title_1">
+                            {{ article.title }}
+                        </router-link>
+                        <p class="content">
+                            {{ article.content }}
+                        </p>
+                        <router-link :to="{name: 'article', params: {id: article.aid, index: index, page: 1}, hash: '#article'}" tag="button" exact>
+                            <span>Read More</span>
+                        </router-link>
+                    </div>
+                </div>
             </div>
-            <router-link
-              :to="{name: 'article', params: {id: article.aid, index: index, page: 1}, hash: '#article'}"
-              tag="p"
-              exact
-              class="title_1"
-            >
-              {{ article.title }}
-            </router-link>
-            <p class="content">
-              {{ article.content }}
-            </p>
-            <router-link
-              :to="{name: 'article', params: {id: article.aid, index: index, page: 1}, hash: '#article'}"
-              tag="button"
-              exact
-            >
-              <span>Read More</span>
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="contact">
-      <a
-        href="#contactMe"
-        class="title animated bounceIn"
-      >
-        <p
-          id="contactMe"
-          class="headline"
-        >
-          Contact me
-        </p>
-      </a>
-      <div class="email animated fadeIn">
-        <input
-          v-model="subject"
-          type="text"
-          placeholder=" 邮件主题"
-        >
-        <input
-          v-model="address"
-          type="text"
-          placeholder=" 邮箱"
-        >
-        <textarea
-          v-model="content"
-          placeholder=" 来唠唠嗑呗"
-          spellcheck="false"
-        />
-        <button
-          class="sendEmail"
-          :disabled="sendFlag"
-          @click="send"
-        >
-          <span>{{ sendFlag ? '发送中...' : '确认' }}</span>
-        </button>
-      </div>
-    </section>
-  </div>
+        </section>
+        <!-- <section class="contact">
+            <a href="#contactMe" class="title animated bounceIn">
+                <p id="contactMe" class="headline">
+                    Contact me
+                </p>
+            </a>
+            <div class="email animated fadeIn">
+                <input v-model="subject" type="text" placeholder=" 邮件主题">
+                <input v-model="address" type="text" placeholder=" 邮箱">
+                <textarea v-model="content" placeholder=" 来唠唠嗑呗" spellcheck="false" />
+                <button class="sendEmail" :disabled="sendFlag" @click="send">
+              <span>{{ sendFlag ? '发送中...' : '确认' }}</span>
+            </button>
+            </div>
+        </section> -->
+    </div>
 </template>
 
 <script>
-import {
-    mapMutations,
-    mapActions,
-    mapGetters
-} from 'vuex'
-export default {
-    data () {
-        return {
-            subject: '',
-            address: '',
-            content: '',
-            sendFlag: false
-        }
-    },
-    created () {
-        this.set_headline({
-            content: 'Welcome to my blog',
-            animation: 'animated bounceIn'
-        })
-        this.getAllArticles({
-            page: 1,
-            limit: 3
-        })
-    },
-    computed: {
-        ...mapGetters(['reducedArticles'])
-    },
-    methods: {
-        ...mapMutations(['set_headline', 'set_dialog']),
-        ...mapActions(['getAllArticles', 'sendMail']),
-        send () {
-            const re = /^[\w_-]+@[\w_-]+\.[\w\\.]+$/
-            if (!this.subject || !this.content) {
-                this.set_dialog({
-                    info: '还有选项没填(⊙o⊙)？',
-                    hasTwoBtn: false,
-                    show: true
-                })
-                return
-            } else if (!re.test(this.address)) {
-                this.set_dialog({
-                    info: '请正确填写邮箱地址',
-                    hasTwoBtn: false,
-                    show: true
-                })
-                return
+    import {
+        mapMutations,
+        mapActions,
+        mapGetters
+    } from 'vuex'
+    export default {
+        data() {
+            return {
+                subject: '',
+                address: '',
+                content: '',
+                sendFlag: false
             }
-            this.sendFlag = true
-            this.sendMail({
-                subject: this.subject,
-                address: this.address,
-                content: this.content
-            }).then(() => {
-                this.subject = ''
-                this.content = ''
-                this.address = ''
-                this.sendFlag = false
-            }).catch(() => {
-                this.sendFlag = false
-                this.set_dialog({
-                    info: 'sorry, 邮件发送失败，请重新发送',
-                    hasTwoBtn: false,
-                    show: true
-                })
+        },
+        created() {
+            this.set_headline({
+                content: 'Welcome to my blog',
+                animation: 'animated bounceIn'
             })
+            this.getAllArticles({
+                page: 1,
+                limit: 3
+            })
+        },
+        computed: {
+            ...mapGetters(['reducedArticles'])
+        },
+        methods: {
+            ...mapMutations(['set_headline', 'set_dialog']),
+            ...mapActions(['getAllArticles', 'sendMail']),
+            send() {
+                const re = /^[\w_-]+@[\w_-]+\.[\w\\.]+$/
+                if (!this.subject || !this.content) {
+                    this.set_dialog({
+                        info: '还有选项没填(⊙o⊙)？',
+                        hasTwoBtn: false,
+                        show: true
+                    })
+                    return
+                } else if (!re.test(this.address)) {
+                    this.set_dialog({
+                        info: '请正确填写邮箱地址',
+                        hasTwoBtn: false,
+                        show: true
+                    })
+                    return
+                }
+                this.sendFlag = true
+                this.sendMail({
+                    subject: this.subject,
+                    address: this.address,
+                    content: this.content
+                }).then(() => {
+                    this.subject = ''
+                    this.content = ''
+                    this.address = ''
+                    this.sendFlag = false
+                }).catch(() => {
+                    this.sendFlag = false
+                    this.set_dialog({
+                        info: 'sorry, 邮件发送失败，请重新发送',
+                        hasTwoBtn: false,
+                        show: true
+                    })
+                })
+            }
         }
     }
-}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
