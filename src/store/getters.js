@@ -14,9 +14,8 @@ renderer.heading = function (text, level) {
 export default {
     reducedArticles: (state) => {
         const articles = state.articles.map(article => {
-            const newArticle = {}
-            for (const i in article) { newArticle[i] = article[i] }
-            newArticle.content = marked(article.content || '').replace(/<[^>]*>/g, '').slice(0, 200) + '......'
+            const newArticle = {...article}
+            newArticle.content = marked(article.content || '').replace(/<.*?>/g, '').slice(0, 200) + '......'
             return newArticle
         })
         return articles

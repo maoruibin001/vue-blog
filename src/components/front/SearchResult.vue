@@ -1,26 +1,6 @@
 <template>
     <div id="search">
-        <div v-for="(article, index) in reducedArticles" id="article" :key="index">
-            <h2>{{ article.title }}</h2>
-            <time><i class="iconfont icon-shijian" />{{ article.date | toDate }}</time>
-            <span class="articleTag">
-            <i class="iconfont icon-label" />{{ article.tags | toTag }}
-          </span>
-            <span class="commentNumber">
-            <i class="iconfont icon-huifu" />{{ article.comment_n }}
-          </span>
-            <p>{{ article.content }}</p>
-            <router-link :to="{name: 'article', params: {id: article.aid, index: index, page: page}, hash: '#article'}" tag="button" exact>
-                <span>Continue reading</span>
-            </router-link>
-        </div>
-        <spinner v-show="loadMore" class="loading" />
-        <p v-if="!loadMore" v-show="!noMore" class="noMore animated fadeIn">
-            下拉加载更多
-        </p>
-        <p v-if="noMore" class="noMore animated fadeIn">
-            没啦没啦，别扯了
-        </p>
+        <ReducedArticles direction='col' :articles='reducedArticles' :headlineOpts='headlineOpts'/>
     </div>
 </template>
 
@@ -31,21 +11,26 @@
         mapMutations,
         mapGetters
     } from 'vuex'
-    import spinner from '../share/spinner'
+    import ReducedArticles from './component/ReduceArticle'
+    // import spinner from '../share/spinner'
     export default {
         data() {
             return {
-                page: 1
+                page: 1,
+                headlineOpts: {
+                    content: '搜索结果',
+                    animation: 'animated rotateIn'
+                }
             }
+        },
+         components: {
+            ReducedArticles
+            // spinner
         },
         created() {
             this.searchArticles({
                 key: 'title',
                 value: this.$route.params.text
-            })
-            this.set_headline({
-                content: '搜索结果',
-                animation: 'animated rotateIn'
             })
         },
         beforeRouteUpdate(to, from, next) {
@@ -70,7 +55,7 @@
         },
         methods: {
             ...mapActions(['searchArticles']),
-            ...mapMutations(['set_headline']),
+            // ...mapMutations(['set_headline']),
             handleScroll() {
                 if (!this.isLoading && this.$route.name === 'SearchResult') {
                     const body = document.body
@@ -90,9 +75,6 @@
                     }
                 }
             }
-        },
-        components: {
-            spinner
         }
     }
 </script>

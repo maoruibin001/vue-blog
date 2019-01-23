@@ -1,104 +1,69 @@
 <template>
-  <div id="list">
-    <i
-      v-show="!showList"
-      class="iconfont icon-mulu"
-      @click="showList = true"
-    />
-    <i
-      v-show="showList"
-      class="iconfont icon-icon13"
-      @click="showList = false"
-    />
-    <transition-group
-      id="showCata"
-      enter-active-class="animated fadeIn"
-      leave-active-class="animated fadeOut"
-      tag="div"
-    >
-      <div
-        v-show="showList"
-        id="empty"
-        key="empty"
-        ref="emptyBox"
-        style="top: 2rem; height: 1.875rem"
-      />
-      <p
-        v-show="showList"
-        key="summary"
-        class="summary"
-      >
-        文章目录
-      </p>
-      <ul
-        v-show="showList"
-        key="catalog"
-        class="catalog"
-      >
-        <li
-          v-for="(title,index) in articleList"
-          :key="index"
-          :class="'level-'+title.level"
-          @click="scrollBorder"
-        >
-          <a
-            :href="'#' + title.content"
-            data-scroll
-          >
-            {{ title.content }}
-          </a>
-        </li>
-      </ul>
-    </transition-group>
-  </div>
+    <div id="list">
+        <i v-show="!showList" class="iconfont icon-mulu" @click="showList = true" />
+        <i v-show="showList" class="iconfont icon-icon13" @click="showList = false" />
+        <transition-group id="showCata" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut" tag="div">
+            <div v-show="showList" id="empty" key="empty" ref="emptyBox" style="top: 2rem; height: 1.875rem" />
+            <p v-show="showList" key="summary" class="summary">
+                文章目录
+            </p>
+            <ul v-show="showList" key="catalog" class="catalog">
+                <li v-for="(title,index) in articleList" :key="index" :class="'level-'+title.level" @click="scrollBorder">
+                    <a :href="'#' + title.content" data-scroll>
+                    {{ title.content }}
+                  </a>
+                </li>
+            </ul>
+        </transition-group>
+    </div>
 </template>
 
 <script>
-import {
-    mapGetters
-} from 'vuex'
-export default {
-    data () {
-        return {
-            showList: true
-        }
-    },
-    mounted () {
-        window.addEventListener('scroll', this.handleScroll)
-    },
-    beforeDestroy () {
-        window.removeEventListener('scroll', this.handleScroll)
-    },
-    computed: {
-        ...mapGetters(['articleList'])
-    },
-    methods: {
-        handleScroll () {
-            if (this.$route.name === 'article') {
-                const listDiv = document.getElementById('list')
-                const topHeight = document.getElementById('nav').clientHeight
-                if (window.scrollY > topHeight) {
-                    listDiv.style.position = 'fixed'
-                    listDiv.style.top = 0
-                } else {
-                    listDiv.style.position = 'absolute'
-                    listDiv.style.top = 40 + 'px'
-                }
+    import {
+        mapGetters
+    } from 'vuex'
+    export default {
+        data() {
+            return {
+                showList: true
             }
         },
-        scrollBorder (e) {
-            this.$refs.emptyBox.style.top = e.target.offsetTop + 'px'
-            this.$refs.emptyBox.style.height = e.target.clientHeight + 'px'
-        }
-    },
-    watch: {
-        $route (to, from) {
-            if (to.name === 'article' && to.hash === '#article') {
-                this.$refs.emptyBox.style.top = 2 + 'rem'
+        mounted() {
+            window.addEventListener('scroll', this.handleScroll)
+        },
+        beforeDestroy() {
+            window.removeEventListener('scroll', this.handleScroll)
+        },
+        computed: {
+            ...mapGetters(['articleList'])
+        },
+        methods: {
+            handleScroll() {
+                if (this.$route.name === 'article') {
+                    const listDiv = document.getElementById('list')
+                    const topHeight = document.getElementById('nav').clientHeight
+                    if (window.scrollY > topHeight) {
+                        listDiv.style.position = 'fixed'
+                        listDiv.style.top = 0
+                    } else {
+                        listDiv.style.position = 'absolute'
+                        listDiv.style.top = 40 + 'px'
+                    }
+                }
+            },
+            scrollBorder(e) {
+                this.$refs.emptyBox.style.top = e.target.offsetTop + 'px'
+                this.$refs.emptyBox.style.height = e.target.clientHeight + 'px'
+            }
+        },
+        watch: {
+            $route(to, from) {
+                if (to.name === 'article' && to.hash === '#article') {
+                    this.$refs.emptyBox.style.top = 2 + 'rem'
+                }
             }
         }
     }
-}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>

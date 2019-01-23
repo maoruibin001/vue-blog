@@ -1,260 +1,225 @@
 <template>
-  <div id="comment">
-    <div class="newComment">
-      <img :src="'../../../../static/' + imgName +'.jpg'">
-      <textarea
-        id="reply"
-        ref="textBox"
-        v-model="content"
-        spellcheck="false"
-        placeholder="说点什么吧..."
-      />
-      <div class="inputBox">
-        <input
-          v-model="address"
-          type="text"
-          placeholder="邮箱 (用于通知)"
-        >
-        <input
-          id="nameBox"
-          v-model="name"
-          type="text"
-          placeholder="称呼"
-          class="name"
-        >
-        <button
-          :disabled="summitFlag"
-          @click="summit"
-        >
-          <span>{{ summitFlag ? '提交中...' : '发布评论' }}</span>
-        </button>
-      </div>
-    </div>
-    <div class="allComments">
-      <div class="summary">
-        <p>评论数 {{ comments.length }}</p>
-        <p>
-          <span @click="getAllComments({id: $route.params.id})">
-            最早
-          </span>|
-          <span @click="getAllComments({id: $route.params.id, sort: 'date'})">
-            最新
-          </span>|
-          <span @click="getAllComments({id: $route.params.id, sort: 'like'})">
-            最热
-          </span>
-        </p>
-      </div>
-      <div
-        v-for="(comment,index) in comments"
-        :key="index"
-        class="comments"
-      >
-        <div
-          id="info"
-          :class="comment.imgName"
-        >
-          <p class="commentName">
-            #{{ index + 1 }} <span>{{ comment.name }}</span>
-          </p>
-          <p class="text">
-            {{ comment.content }}
-          </p>
-          <div class="options">
-            <p class="commentDate">
-              {{ comment.date | to_date }}
-            </p>
-            <a
-              href="#comment"
-              data-scroll
-            >
-              <span @click="reply(comment.name)">
-                <i class="iconfont icon-huifu" />回复
-              </span>
-            </a>
-            <p @click="addLike(comment._id, index)">
-              <i
-                class="iconfont icon-like"
-                :class="{activeLike: likeArr.indexOf(index) !== -1}"
-              /> {{ comment.like }}
-            </p>
-          </div>
-          <img :src="'../../../../static/' + comment.imgName + '.jpg'">
+    <div id="comment">
+        <div class="newComment">
+            <img :src="'../../../../static/' + imgName +'.jpg'">
+            <textarea id="reply" ref="textBox" v-model="content" spellcheck="false" placeholder="说点什么吧..." />
+            <div class="inputBox">
+                <input v-model="address" type="text" placeholder="邮箱 (用于通知)">
+                <input id="nameBox" v-model="name" type="text" placeholder="称呼" class="name">
+                <button :disabled="summitFlag" @click="summit">
+                  <span>{{ summitFlag ? '提交中...' : '发布评论' }}</span>
+                </button>
+            </div>
         </div>
-      </div>
-      <p
-        v-show="comments.length === 0"
-        class="nocomment"
-      >
-        哎，没人理我 :(
-      </p>
+        <div class="allComments">
+            <div class="summary">
+                <p>评论数 {{ comments.length }}</p>
+                <p>
+                    <span @click="getAllComments({id: $route.params.id})">
+                    最早
+                  </span>|
+                    <span @click="getAllComments({id: $route.params.id, sort: 'date'})">
+                    最新
+                  </span>|
+                    <span @click="getAllComments({id: $route.params.id, sort: 'like'})">
+                    最热
+                  </span>
+                </p>
+            </div>
+            <div v-for="(comment,index) in comments" :key="index" class="comments">
+                <div id="info" :class="comment.imgName">
+                    <p class="commentName">
+                        #{{ index + 1 }} <span>{{ comment.name }}</span>
+                    </p>
+                    <p class="text">
+                        {{ comment.content }}
+                    </p>
+                    <div class="options">
+                        <p class="commentDate">
+                            {{ comment.date | to_date }}
+                        </p>
+                        <a href="#comment" data-scroll>
+                            <span @click="reply(comment.name)">
+                        <i class="iconfont icon-huifu" />回复
+                      </span>
+                        </a>
+                        <p @click="addLike(comment._id, index)">
+                            <i class="iconfont icon-like" :class="{activeLike: likeArr.indexOf(index) !== -1}" /> {{ comment.like }}
+                        </p>
+                    </div>
+                    <img :src="'../../../../static/' + comment.imgName + '.jpg'">
+                </div>
+            </div>
+            <p v-show="comments.length === 0" class="nocomment">
+                哎，没人理我 :(
+            </p>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
-import {
-    mapActions,
-    mapState,
-    mapMutations
-} from 'vuex'
-export default {
-    data () {
-        return {
-            name: '',
-            address: '',
-            content: '',
-            imgName: '',
-            summitFlag: false
-        }
-    },
-    created () {
-        this.getAllComments({
-            id: this.$route.params.id
-        })
-        if (localStorage.token && this.user.name) {
-            this.imgName = 'me'
-        } else {
-            this.imgName = 'reviewer'
-        }
-        if (localStorage.reviewer) {
-            this.address = localStorage['e-mail']
-            this.name = localStorage['reviewer']
-        }
-    },
-    computed: {
-        ...mapState(['comments', 'user']),
-        likeArr () { // 访问者点赞了哪些评论的数组
-            if (localStorage.getItem(this.$route.params.id)) {
-                const item = localStorage.getItem(this.$route.params.id) // 初始化访问者的点赞情况
-                return JSON.parse(item)
+    import {
+        mapActions,
+        mapState,
+        mapMutations
+    } from 'vuex'
+    export default {
+        data() {
+            return {
+                name: '',
+                address: '',
+                content: '',
+                imgName: '',
+                summitFlag: false
             }
-            return []
-        }
-    },
-    methods: {
-        ...mapActions(['summitComment', 'getAllComments', 'updateLike']),
-        ...mapMutations(['set_dialog']),
-        summit () {
-            const re = /^[\w_-]+@[\w_-]+\.[\w\\.]+$/
-            if (!this.name || !this.content) {
-                this.set_dialog({
-                    info: '还有选项没填(⊙o⊙)？',
-                    hasTwoBtn: false,
-                    show: true
-                })
-                return
-            } else if (!re.test(this.address)) {
-                this.set_dialog({
-                    info: '请正确填写邮箱地址',
-                    hasTwoBtn: false,
-                    show: true
-                })
-                return
+        },
+        created() {
+            this.getAllComments({
+                id: this.$route.params.id
+            })
+            if (localStorage.token && this.user.name) {
+                this.imgName = 'me'
+            } else {
+                this.imgName = 'reviewer'
             }
-            // 限制评论内容
-            if (this.content.length > 500) {
-                this.set_dialog({
-                    info: '您的评论内容太长，要言简意赅哦',
-                    hasTwoBtn: false,
-                    show: true
-                })
-                return false
-            } else if (this.content.length < 5) {
-                this.set_dialog({
-                    info: '您的评论内容太短，说多一点嘛',
-                    hasTwoBtn: false,
-                    show: true
-                })
-                return false
-            } else if (/\d{7,}/i.test(this.content) || // 连续7个以上数字，过滤发Q号和Q群的评论
+            if (localStorage.reviewer) {
+                this.address = localStorage['e-mail']
+                this.name = localStorage['reviewer']
+            }
+        },
+        computed: {
+            ...mapState(['comments', 'user']),
+            likeArr() { // 访问者点赞了哪些评论的数组
+                if (localStorage.getItem(this.$route.params.id)) {
+                    const item = localStorage.getItem(this.$route.params.id) // 初始化访问者的点赞情况
+                    return JSON.parse(item)
+                }
+                return []
+            }
+        },
+        methods: {
+            ...mapActions(['summitComment', 'getAllComments', 'updateLike']),
+            ...mapMutations(['set_dialog']),
+            summit() {
+                const re = /^[\w_-]+@[\w_-]+\.[\w\\.]+$/
+                if (!this.name || !this.content) {
+                    this.set_dialog({
+                        info: '还有选项没填(⊙o⊙)？',
+                        hasTwoBtn: false,
+                        show: true
+                    })
+                    return
+                } else if (!re.test(this.address)) {
+                    this.set_dialog({
+                        info: '请正确填写邮箱地址',
+                        hasTwoBtn: false,
+                        show: true
+                    })
+                    return
+                }
+                // 限制评论内容
+                if (this.content.length > 500) {
+                    this.set_dialog({
+                        info: '您的评论内容太长，要言简意赅哦',
+                        hasTwoBtn: false,
+                        show: true
+                    })
+                    return false
+                } else if (this.content.length < 5) {
+                    this.set_dialog({
+                        info: '您的评论内容太短，说多一点嘛',
+                        hasTwoBtn: false,
+                        show: true
+                    })
+                    return false
+                } else if (/\d{7,}/i.test(this.content) || // 连续7个以上数字，过滤发Q号和Q群的评论
                     /(\d.*){7,}/i.test(this.content) || // 非连续的7个以上数字，过滤用字符间隔开的Q号和Q群的评论
                     /\u52A0.*\u7FA4/i.test(this.content) || // 包含“加群”两字的通常是发Q群的垃圾评论
                     /(\u9876.*){5,}/i.test(this.content) || // 过滤5个以上“顶”字的评论
                     /([\u4E00\u4E8C\u4E09\u56DB\u4E94\u516D\u4E03\u516B\u4E5D\u25CB\u58F9\u8D30\u53C1\u8086\u4F0D\u9646\u67D2\u634C\u7396\u96F6].*){7,}/i.test(this.content) // 过滤用汉字发Q号和Q群的评论
-            ) {
-                this.set_dialog({
-                    info: '请不要发表灌水、广告、违法、Q群Q号等信息，感谢您的配合！',
-                    hasTwoBtn: false,
-                    show: true
+                ) {
+                    this.set_dialog({
+                        info: '请不要发表灌水、广告、违法、Q群Q号等信息，感谢您的配合！',
+                        hasTwoBtn: false,
+                        show: true
+                    })
+                    return false
+                }
+                this.summitFlag = true
+                // 将评论者的邮箱和用户名存储在浏览器中，在created钩子中赋值, 这样刷新后邮箱和昵称都不用再写一遍
+                localStorage.setItem('e-mail', this.address)
+                localStorage.setItem('reviewer', this.name)
+                this.summitComment({
+                    imgName: this.imgName,
+                    name: this.name,
+                    content: this.content,
+                    address: this.address,
+                    articleId: this.$route.params.id,
+                    curPath: this.$route.fullPath
+                }).then(() => {
+                    this.content = ''
+                    this.summitFlag = false
+                    this.getAllComments({
+                        id: this.$route.params.id
+                    })
+                }).catch((err) => {
+                    this.set_dialog({
+                        info: err.body,
+                        hasTwoBtn: false,
+                        show: true
+                    })
+                    this.summitFlag = false
+                    this.name = ''
                 })
-                return false
+            },
+            reply(name) {
+                this.content = '@' + name + ': '
+                this.$refs.textBox.focus()
+            },
+            addLike(id, index) {
+                const i = this.likeArr.indexOf(index)
+                if (i === -1) {
+                    this.updateLike({
+                        id: id,
+                        option: 'add'
+                    }).then(() => {
+                        this.likeArr.push(index)
+                        this.getAllComments({
+                            id: this.$route.params.id
+                        })
+                        localStorage[this.$route.params.id] = JSON.stringify(this.likeArr) // 记录访问者的点赞情况
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+                } else {
+                    this.updateLike({
+                        id: id,
+                        option: 'drop'
+                    }).then(() => {
+                        this.likeArr.splice(i, 1)
+                        this.getAllComments({
+                            id: this.$route.params.id
+                        })
+                        localStorage[this.$route.params.id] = JSON.stringify(this.likeArr) // 记录访问者的点赞情况
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+                }
             }
-            this.summitFlag = true
-            // 将评论者的邮箱和用户名存储在浏览器中，在created钩子中赋值, 这样刷新后邮箱和昵称都不用再写一遍
-            localStorage.setItem('e-mail', this.address)
-            localStorage.setItem('reviewer', this.name)
-            this.summitComment({
-                imgName: this.imgName,
-                name: this.name,
-                content: this.content,
-                address: this.address,
-                articleId: this.$route.params.id,
-                curPath: this.$route.fullPath
-            }).then(() => {
-                this.content = ''
-                this.summitFlag = false
+        },
+        watch: {
+            $route(to, from) {
+                // #article是跳到另一篇文章，将评论框清空，#目录标题是锚点跳转，不清空评论框
+                // to.hash === '#article' ? this.content = '' : 0
+                if (to.hash === '#article') {
+                    this.content = ''
+                }
                 this.getAllComments({
-                    id: this.$route.params.id
-                })
-            }).catch((err) => {
-                this.set_dialog({
-                    info: err.body,
-                    hasTwoBtn: false,
-                    show: true
-                })
-                this.summitFlag = false
-                this.name = ''
-            })
-        },
-        reply (name) {
-            this.content = '@' + name + ': '
-            this.$refs.textBox.focus()
-        },
-        addLike (id, index) {
-            const i = this.likeArr.indexOf(index)
-            if (i === -1) {
-                this.updateLike({
-                    id: id,
-                    option: 'add'
-                }).then(() => {
-                    this.likeArr.push(index)
-                    this.getAllComments({
-                        id: this.$route.params.id
-                    })
-                    localStorage[this.$route.params.id] = JSON.stringify(this.likeArr) // 记录访问者的点赞情况
-                }).catch((err) => {
-                    console.log(err)
-                })
-            } else {
-                this.updateLike({
-                    id: id,
-                    option: 'drop'
-                }).then(() => {
-                    this.likeArr.splice(i, 1)
-                    this.getAllComments({
-                        id: this.$route.params.id
-                    })
-                    localStorage[this.$route.params.id] = JSON.stringify(this.likeArr) // 记录访问者的点赞情况
-                }).catch((err) => {
-                    console.log(err)
+                    id: to.params.id
                 })
             }
-        }
-    },
-    watch: {
-        $route (to, from) {
-            // #article是跳到另一篇文章，将评论框清空，#目录标题是锚点跳转，不清空评论框
-            // to.hash === '#article' ? this.content = '' : 0
-            if (to.hash === '#article') {
-                this.content = ''
-            }
-            this.getAllComments({
-                id: to.params.id
-            })
         }
     }
-}
 </script>
 
 <style lang='scss' rel='stylesheet/scss' scoped>

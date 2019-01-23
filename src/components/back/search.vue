@@ -1,106 +1,94 @@
 <template>
-  <div class="container">
-    <div class="search">
-      <input
-        v-model="text"
-        type="text"
-        :placeholder="tip"
-        onfocus="this.placeholder=''"
-        @keydown.enter="searchArticles({key: picked, value: text, page: page})"
-      >
-      <i
-        class="iconfont icon-search"
-        @click="searchArticles({key: picked, value: text, page: page})"
-      />
+    <div class="container">
+        <div class="search">
+            <input v-model="text" type="text" :placeholder="tip" onfocus="this.placeholder=''" @keydown.enter="searchArticles({key: picked, value: text, page: page})">
+            <i class="iconfont icon-search" @click="searchArticles({key: picked, value: text, page: page})" />
+        </div>
+        <div class="searchString">
+            搜索匹配：
+            <label for="title">
+            <input
+              id="title"
+              v-model="picked"
+              type="radio"
+              value="title"
+            >标题
+          </label>
+            <label for="tags">
+            <input
+              id="tags"
+              v-model="picked"
+              type="radio"
+              value="tags"
+            >标签
+          </label>
+            <label for="date">
+            <input
+              id="date"
+              v-model="picked"
+              type="radio"
+              value="date"
+            >日期
+          </label>
+        </div>
+        <p>搜索结果</p>
+        <article-content @addPage="nextPage" @dropPage="prePage" />
     </div>
-    <div class="searchString">
-      搜索匹配：
-      <label for="title">
-        <input
-          id="title"
-          v-model="picked"
-          type="radio"
-          value="title"
-        >标题
-      </label>
-      <label for="tags">
-        <input
-          id="tags"
-          v-model="picked"
-          type="radio"
-          value="tags"
-        >标签
-      </label>
-      <label for="date">
-        <input
-          id="date"
-          v-model="picked"
-          type="radio"
-          value="date"
-        >日期
-      </label>
-    </div>
-    <p>搜索结果</p>
-    <article-content
-      @addPage="nextPage"
-      @dropPage="prePage"
-    />
-  </div>
 </template>
 
 <script>
-import ArticleContent from './component/ArticleContent'
-import {
-    mapActions,
-    mapMutations
-} from 'vuex'
-export default {
-    data () {
-        return {
-            picked: 'title',
-            text: '',
-            page: 1
-        }
-    },
-    computed: {
-        tip () {
-            if (this.picked === 'title') return '请输入标题的部分内容'
-            if (this.picked === 'tags') return '请输入完整的标签，多个标签空格隔开'
-            if (this.picked === 'date') return '检索格式： 2017-04-01'
-            return ''
-        }
-    },
-    created () {
-        this.set_all_articles({})
-    },
-    methods: {
-        ...mapActions(['searchArticles']),
-        ...mapMutations(['set_all_articles']),
-        nextPage () {
-            this.page++
-            this.searchArticles({
-                key: this.picked,
-                value: this.text,
-                page: this.page
-            })
-        },
-        prePage () {
-            if (!(this.page - 1)) {
-                alert('已经到第一页咯')
-            } else {
-                this.page--
-                this.searchArticles({
-                    key: this.picked,
-                    value: this.text,
-                    page: this.page
-                })
+    import ArticleContent from './component/ArticleContent'
+    import {
+        mapActions,
+        mapMutations
+    } from 'vuex'
+    export default {
+        data() {
+            return {
+                picked: 'title',
+                text: '',
+                page: 1
             }
+        },
+        computed: {
+            tip() {
+                if (this.picked === 'title') return '请输入标题的部分内容'
+                if (this.picked === 'tags') return '请输入完整的标签，多个标签空格隔开'
+                if (this.picked === 'date') return '检索格式： 2017-04-01'
+                return ''
+            }
+        },
+        created() {
+            this.set_all_articles({})
+        },
+        methods: {
+            ...mapActions(['searchArticles']),
+            ...mapMutations(['set_all_articles']),
+            nextPage() {
+                this.page++
+                    this.searchArticles({
+                        key: this.picked,
+                        value: this.text,
+                        page: this.page
+                    })
+            },
+            prePage() {
+                if (!(this.page - 1)) {
+                    alert('已经到第一页咯')
+                } else {
+                    this.page--
+                        this.searchArticles({
+                            key: this.picked,
+                            value: this.text,
+                            page: this.page
+                        })
+                }
+            }
+        },
+        components: {
+            ArticleContent
         }
-    },
-    components: {
-        ArticleContent
     }
-}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>

@@ -7,42 +7,9 @@
                 </p>
             </a>
             <div class="posts animated fadeIn">
-                <div class="flex">
-                    <div v-for="(article, index) in reducedArticles" :key="index" class="oneArticle">
-                        <div class="option">
-                            <time>{{ article.date | toDate }}</time>
-                            <span class="commentNumber">
-                    <i class="iconfont icon-huifu" />{{ article.comment_n }}
-                  </span>
-                        </div>
-                        <router-link :to="{name: 'article', params: {id: article.aid, index: index, page: 1}, hash: '#article'}" tag="p" exact class="title_1">
-                            {{ article.title }}
-                        </router-link>
-                        <p class="content">
-                            {{ article.content }}
-                        </p>
-                        <router-link :to="{name: 'article', params: {id: article.aid, index: index, page: 1}, hash: '#article'}" tag="button" exact>
-                            <span>Read More</span>
-                        </router-link>
-                    </div>
-                </div>
+                <ReducedArticles direction='row' :headlineOpts='headlineOpts' :articles='reducedArticles' @loadMore='loadMore'></ReducedArticles>
             </div>
         </section>
-        <!-- <section class="contact">
-            <a href="#contactMe" class="title animated bounceIn">
-                <p id="contactMe" class="headline">
-                    Contact me
-                </p>
-            </a>
-            <div class="email animated fadeIn">
-                <input v-model="subject" type="text" placeholder=" 邮件主题">
-                <input v-model="address" type="text" placeholder=" 邮箱">
-                <textarea v-model="content" placeholder=" 来唠唠嗑呗" spellcheck="false" />
-                <button class="sendEmail" :disabled="sendFlag" @click="send">
-              <span>{{ sendFlag ? '发送中...' : '确认' }}</span>
-            </button>
-            </div>
-        </section> -->
     </div>
 </template>
 
@@ -52,23 +19,26 @@
         mapActions,
         mapGetters
     } from 'vuex'
+    import ReducedArticles from './component/ReduceArticle'
     export default {
+        components: {
+            ReducedArticles
+        },
         data() {
             return {
                 subject: '',
                 address: '',
                 content: '',
-                sendFlag: false
+                sendFlag: false,
+                headlineOpts: {
+                    content: 'Welcome to my blog',
+                    animation: 'animated bounceIn'
+                }
             }
         },
         created() {
-            this.set_headline({
-                content: 'Welcome to my blog',
-                animation: 'animated bounceIn'
-            })
             this.getAllArticles({
-                page: 1,
-                limit: 3
+                page: 1
             })
         },
         computed: {
@@ -112,7 +82,10 @@
                         show: true
                     })
                 })
-            }
+            },
+            loadMore() {
+
+            },
         }
     }
 </script>
@@ -130,48 +103,14 @@
                 }
             }
             .posts {
-                margin-top: 1rem;
-                .flex {
-                    color: #fff;
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    padding-left: 1rem;
-                    padding-right: 1rem;
-                    div.oneArticle {
-                        flex-shrink: 1;
-                        width: 15rem;
-                        border: 0.1875rem solid rgb(129, 216, 208);
-                        padding: 0 2rem 1.25rem;
-                        margin: 0 2rem 4rem 2rem;
-                        .option {
-                            display: flex;
-                            flex-wrap: wrap;
-                            justify-content: flex-start;
-                            padding-top: 1rem;
-                            time {
-                                flex-shrink: 1;
-                                width: 16rem;
-                                padding-bottom: 1rem;
-                                display: inline-block;
-                                font-size: 1.25rem;
-                            }
-                        }
-                        p:nth-child(2) {
-                            font-size: 1.5rem;
-                            font-weight: bold;
-                            padding-top: 1.25rem;
-                            border-top: 0.125rem dashed rgb(129, 216, 208);
-                            &:hover {
-                                color: rgb(0, 194, 169);
-                                cursor: pointer;
-                            }
-                        }
-                        p:nth-child(3) {
-                            margin-top: 1.875rem;
-                        }
-                    }
-                }
+                margin-top: 1rem; // .flex {
+                //     color: #fff;
+                //     display: flex;
+                //     flex-wrap: wrap;
+                //     justify-content: center;
+                //     padding-left: 1rem;
+                //     padding-right: 1rem;
+                // }
             }
         }
         .contact {
@@ -237,11 +176,11 @@
         }
     }
     @media screen and (max-width: 440px) {
-        .oneArticle {
-            flex-grow: 1;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-        }
+        // .oneArticle {
+        //     flex-grow: 1;
+        //     margin-left: 0 !important;
+        //     margin-right: 0 !important;
+        // }
         .email {
             width: 100% !important;
         }

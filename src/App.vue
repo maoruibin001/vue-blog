@@ -55,7 +55,7 @@
         width: 100%;
     }
      ::-webkit-scrollbar {
-        display: none
+        /* display: none */
         /* position: absolute; */
     }
     @media screen and (max-width: 440px) {

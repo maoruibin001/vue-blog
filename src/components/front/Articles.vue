@@ -1,129 +1,92 @@
 <template>
-  <div class="articleContent">
-    <div id="articles">
-      <div class="tags animated fadeIn">
-        <div class="tagFlex">
-          <button
-            v-for="(tag, index) in allTags"
-            :key="index"
-            :class="{activeBtn: selectIndex === index}"
-            @click="switchTag({value: tag, page: 1}, index, tag)"
-          >
-            <span>{{ tag }}</span>
-          </button>
+    <div class="articleContent">
+        <div id="articles">
+            <div class="tags animated fadeIn">
+                <div class="tagFlex">
+                    <button v-for="(tag, index) in allTags" :key="index" :class="{activeBtn: selectIndex === index}" @click="switchTag({value: tag, page: 1}, index, tag)">
+                    <span>{{ tag }}</span>
+                  </button>
+                </div>
+            </div>
+            <ReducedArticles direction='col' :articles='reducedArticles' :headlineOpts='headlineOpts'/>
         </div>
-      </div>
-      <div
-        v-for="(article, index) in reducedArticles"
-        id="article"
-        :key="index"
-        class="animated fadeIn"
-      >
-        <h2>{{ article.title }}</h2>
-        <time><i class="iconfont icon-shijian" />{{ article.date | toDate }}</time>
-        <span class="articleTag">
-          <i class="iconfont icon-label" />{{ article.tags | toTag }}
-        </span>
-        <span class="commentNumber">
-          <i class="iconfont icon-huifu" />{{ article.comment_n }}
-        </span>
-        <p>{{ article.content }}</p>
-        <router-link
-          :to="{name: 'article', params: {id: article.aid, index: index, page: page}, hash: '#article'}"
-          tag="button"
-          exact
-        >
-          <span>Continue reading</span>
-        </router-link>
-      </div>
-      <p
-        v-if="!loadMore"
-        v-show="!noMore"
-        class="noMore animated fadeIn"
-      >
-        下拉加载更多
-      </p>
-      <p
-        v-if="noMore"
-        class="noMore animated fadeIn"
-      >
-        已经到底了，别扯了
-      </p>
     </div>
-    <spinner
-      v-show="loadMore"
-      class="spinner"
-    />
-  </div>
 </template>
 
 <script>
-import {
-    mapMutations,
-    mapActions,
-    mapGetters,
-    mapState
-} from 'vuex'
-import spinner from '../share/spinner'
-export default {
-    data () {
-        return {
-            selectIndex: 0,
-            page: 1
-        }
-    },
-    created () {
-        this.set_headline({
-            content: '文章见解',
-            animation: 'animated flipInY'
-        })
-        this.getAllArticles({
-            page: 1
-        })
-        this.getAllTags()
-    },
-    computed: {
-        ...mapGetters(['reducedArticles', 'allTags']),
-        ...mapState(['curTag', 'loadMore', 'moreArticle', 'isLoading', 'noMore'])
-    },
-    mounted () {
-        window.addEventListener('scroll', this.handleScroll)
-    },
-    beforeRouteLeave (to, from, next) {
-        window.removeEventListener('scroll', this.handleScroll)
-        next()
-    },
-    methods: {
-        ...mapMutations(['set_headline', 'set_curtag', 'moreArticle_toggle']),
-        ...mapActions(['getAllArticles', 'getAllTags', 'searchArticles']),
-        switchTag (payload, index, tag) {
-            this.getAllArticles(payload)
-            this.selectIndex = index
-            this.set_curtag(tag)
-        },
-        handleScroll () {
-            if (!this.isLoading && this.$route.name === 'articles') {
-                const body = document.body
-                const totalHeight = body.scrollHeight
-                const scrollTop = body.scrollTop
-                const clientHeight = window.innerHeight
-                if (totalHeight - scrollTop - clientHeight === 0 && this.moreArticle) {
-                    this.getAllArticles({
-                        value: this.curTag,
-                        add: true,
-                        page: ++this.page
-                    })
+    import {
+        mapMutations,
+        mapActions,
+        mapGetters,
+        mapState
+    } from 'vuex'
+    import ReducedArticles from './component/ReduceArticle'
+    // import spinner from '../share/spinner'
+    export default {
+        data() {
+            return {
+                selectIndex: 0,
+                page: 1,
+                 headlineOpts: {
+                    content: 'Article',
+                    animation: 'animated flipInY'
                 }
-                if (!this.moreArticle) {
-                    this.page = 1
+            }
+        },
+        created() {
+            // this.set_headline({
+            //     content: '文章见解',
+            //     animation: 'animated flipInY'
+            // })
+            this.getAllArticles({
+                page: 1
+            })
+            this.getAllTags()
+        },
+        components: {
+            // spinner,
+            ReducedArticles
+        },
+        computed: {
+            ...mapGetters(['reducedArticles', 'allTags']),
+            ...mapState(['curTag', 'loadMore', 'moreArticle', 'isLoading', 'noMore'])
+        },
+        mounted() {
+            window.addEventListener('scroll', this.handleScroll)
+        },
+        beforeRouteLeave(to, from, next) {
+            window.removeEventListener('scroll', this.handleScroll)
+            next()
+        },
+        methods: {
+            ...mapMutations(['set_headline', 'set_curtag', 'moreArticle_toggle']),
+            ...mapActions(['getAllArticles', 'getAllTags', 'searchArticles']),
+            switchTag(payload, index, tag) {
+                this.getAllArticles(payload)
+                this.selectIndex = index
+                this.set_curtag(tag)
+            },
+            handleScroll() {
+                if (!this.isLoading && this.$route.name === 'articles') {
+                    const body = document.body
+                    const totalHeight = body.scrollHeight
+                    const scrollTop = body.scrollTop
+                    const clientHeight = window.innerHeight
+                    if (totalHeight - scrollTop - clientHeight === 0 && this.moreArticle) {
+                        this.getAllArticles({
+                            value: this.curTag,
+                            add: true,
+                            page: ++this.page
+                        })
+                    }
+                    if (!this.moreArticle) {
+                        this.page = 1
+                    }
                 }
             }
         }
-    },
-    components: {
-        spinner
+        
     }
-}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>

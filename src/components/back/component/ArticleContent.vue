@@ -1,107 +1,93 @@
 <template>
-  <table>
-    <thead>
-      <tr>
-        <th>标题</th>
-        <th>标签</th>
-        <th>日期</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="(article, index) in articles"
-        :key="index"
-      >
-        <router-link
-          :to="{name: 'editor', query: {aid: article.aid}}"
-          tag="td"
-          class="title"
-        >
-          {{ article.title }}
-        </router-link>
-        <td>{{ article.tags | toTag }}</td>
-        <td>{{ article.date | toDate }}</td>
-        <td>
-          <router-link
-            :to="{name: 'editor', query: {aid: article.aid}}"
-            class="iconfont icon-biji-copy"
-            tag="i"
-          />
-          <i
-            class="iconfont icon-shanchu"
-            @click="deleteConfirm(article.aid)"
-          />
-        </td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td @click="prePage">
-          上一页
-        </td>
-        <td colspan="2">
-          第 {{ page }} 页
-        </td>
-        <td @click="nextPage">
-          下一页
-        </td>
-      </tr>
-    </tfoot>
-  </table>
+    <table>
+        <thead>
+            <tr>
+                <th>标题</th>
+                <th>标签</th>
+                <th>日期</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(article, index) in articles" :key="index">
+                <router-link :to="{name: 'editor', query: {aid: article.aid}}" tag="td" class="title">
+                    {{ article.title }}
+                </router-link>
+                <td>{{ article.tags | toTag }}</td>
+                <td>{{ article.date | toDate }}</td>
+                <td>
+                    <router-link :to="{name: 'editor', query: {aid: article.aid}}" class="iconfont icon-biji-copy" tag="i" />
+                    <i class="iconfont icon-shanchu" @click="deleteConfirm(article.aid)" />
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td @click="prePage">
+                    上一页
+                </td>
+                <td colspan="2">
+                    第 {{ page }} 页
+                </td>
+                <td @click="nextPage">
+                    下一页
+                </td>
+            </tr>
+        </tfoot>
+    </table>
 </template>
 
 <script>
-import {
-    mapState,
-    mapActions,
-    mapMutations
-} from 'vuex'
-export default {
-    data () {
-        return {
-            page: 1
-        }
-    },
-    computed: {
-        ...mapState(['articles', 'dialog'])
-    },
-    methods: {
-        ...mapActions(['delArticle']),
-        ...mapMutations(['set_dialog']),
-        nextPage () {
-            this.page++
-            this.$emit('addPage') // 传递给父组件
-        },
-        prePage () {
-            if (!(this.page - 1)) {
-                alert('已经到第一页咯')
-            } else {
-                this.page--
-                this.$emit('dropPage') // 传递给父组件
+    import {
+        mapState,
+        mapActions,
+        mapMutations
+    } from 'vuex'
+    export default {
+        data() {
+            return {
+                page: 1
             }
         },
-        deleteConfirm (aid) {
-            this.set_dialog({
-                info: '确认删除(⊙o⊙)？',
-                hasTwoBtn: true,
-                show: true
-            })
-            new Promise((resolve, reject) => {
-                this.dialog.resolveFn = resolve
-                this.dialog.rejectFn = reject
-            }).then(() => {
-                this.delArticle({
-                    aid: aid,
-                    page: this.page,
-                    route: this.$route
+        computed: {
+            ...mapState(['articles', 'dialog'])
+        },
+        methods: {
+            ...mapActions(['delArticle']),
+            ...mapMutations(['set_dialog']),
+            nextPage() {
+                this.page++
+                    this.$emit('addPage') // 传递给父组件
+            },
+            prePage() {
+                if (!(this.page - 1)) {
+                    alert('已经到第一页咯')
+                } else {
+                    this.page--
+                        this.$emit('dropPage') // 传递给父组件
+                }
+            },
+            deleteConfirm(aid) {
+                this.set_dialog({
+                    info: '确认删除(⊙o⊙)？',
+                    hasTwoBtn: true,
+                    show: true
                 })
-            }).catch((err) => {
-                console.log(err)
-            })
+                new Promise((resolve, reject) => {
+                    this.dialog.resolveFn = resolve
+                    this.dialog.rejectFn = reject
+                }).then(() => {
+                    this.delArticle({
+                        aid: aid,
+                        page: this.page,
+                        route: this.$route
+                    })
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }
         }
     }
-}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
