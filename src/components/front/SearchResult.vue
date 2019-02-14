@@ -32,14 +32,19 @@
                 key: 'title',
                 value: this.$route.params.text
             })
+            this.$route.params.text = ""
         },
         beforeRouteUpdate(to, from, next) {
-            if (to.params.text) {
-                this.searchArticles({
+            this.searchArticles({
                     key: 'title',
                     value: to.params.text
                 })
-            }
+            // if (to.params.text) {
+            //     this.searchArticles({
+            //         key: 'title',
+            //         value: to.params.text
+            //     })
+            // }
             next()
         },
         mounted() {

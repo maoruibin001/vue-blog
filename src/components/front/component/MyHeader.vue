@@ -42,11 +42,14 @@
                 text: ''
             }
         },
+        created() {
+            this.text = this.$route.params.text
+        },
         computed: mapState(['headline']),
         methods: {
             ...mapActions(['searchArticles']),
             search() {
-                this.$router.push({
+                this.$router.replace({
                     name: 'SearchResult',
                     params: {
                         text: this.text

@@ -60,7 +60,7 @@
                 isMarked: true,
                 firstUpdate: true,
                 isChange: false,
-                mdHtml: ''
+                mdHtml: '',
             }
         },
         created() {
@@ -92,17 +92,17 @@
         },
         computed: {
             ...mapState(['article', 'isSaving', 'dialog']),
-            // mdContent: {
-            //     get() {
-            //         this.mdHtml = marked(this.article.content || '', {
-            //             renderer: renderer
-            //         })
-            //         return this.article.content
-            //     },
-            //     set(value) {
-            //         this.update_post_content(value)
-            //     }
-            // },
+            mdContent: {
+                get() {
+                    this.mdHtml = marked(this.article.content || '', {
+                        renderer: renderer
+                    })
+                    return this.article.content
+                },
+                set(value) {
+                    this.update_post_content(value)
+                }
+            },
             title: {
                 get() {
                     return this.article.title || ''

@@ -3,7 +3,7 @@
         <div id="articles">
             <div class="tags animated fadeIn">
                 <div class="tagFlex">
-                    <button v-for="(tag, index) in allTags" :key="index" :class="{activeBtn: selectIndex === index}" @click="switchTag({value: tag, page: 1}, index, tag)">
+                    <button v-for="(tag, index) in allTags" :key="index" :class="{activeBtn: selectIndex === index}" @click="switchTag({tag: tag, page: 1}, index, tag)">
                     <span>{{ tag }}</span>
                   </button>
                 </div>
@@ -21,12 +21,15 @@
         mapState
     } from 'vuex'
     import ReducedArticles from './component/ReduceArticle'
+    const HEIDERHEIGHT = 106;
+    const FOOTERHEIGHT = 94;
     // import spinner from '../share/spinner'
     export default {
         data() {
             return {
                 selectIndex: 0,
                 page: 1,
+                // contentHeight: document.body.clientHeight - HEIDERHEIGHT - FOOTERHEIGHT + "px",
                  headlineOpts: {
                     content: 'Article',
                     animation: 'animated flipInY'
@@ -74,7 +77,7 @@
                     const clientHeight = window.innerHeight
                     if (totalHeight - scrollTop - clientHeight === 0 && this.moreArticle) {
                         this.getAllArticles({
-                            value: this.curTag,
+                            tag: this.curTag,
                             add: true,
                             page: ++this.page
                         })

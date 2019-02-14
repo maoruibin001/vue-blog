@@ -1,7 +1,7 @@
 <template>
     <div id="wrapper">
         <my-header />
-        <router-view v-show="!isLoading" class="content" />
+        <router-view v-show="!isLoading" class="content" :style="{minHeight: contentHeight, margin: 0, padding: 0}" />
         <!-- <spinner v-show="isLoading" /> -->
         <transition name="huojian" enter-active-class="animated bounceIn" leave-active-class="animated fadeOut">
             <a href="#app" class="rocket">
@@ -16,13 +16,18 @@
     import MyHeader from './component/MyHeader'
     import MyFooter from './component/MyFooter'
     // import spinner from '../share/spinner'
+    const HEIDERHEIGHT = 106;
+    const FOOTERHEIGHT = 94;
+    const GAP = 60;
     import {
         mapState
     } from 'vuex'
     export default {
         data() {
             return {
-                show: false
+                show: false,
+                contentHeight: document.body.clientHeight - HEIDERHEIGHT - FOOTERHEIGHT + GAP + "px",
+
             }
         },
         mounted() {

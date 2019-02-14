@@ -1,7 +1,7 @@
 <template>
     <div v-if="show" class="tag_div">
         <input v-model="tagContent" type="text" class="newInput" placeholder="标签" onfocus="this.placeholder=''" @blur="isRepeated" @keydown.enter="addTag">
-        <i class="iconfont icon-shanchu1" @click="delTag" />
+        <i class="iconfont icon-shanchu1" @click="delTag" v-if='tags.length > 1'/>
         <i v-if="index === tags.length - 1" class="iconfont icon-zengjia" @click="addTag" />
     </div>
 </template>
@@ -24,7 +24,6 @@
             ...mapMutations(['set_dialog']),
             delTag() {
                 this.tags.splice(this.index, 1) // 通过操作数组来删除标签
-                console.log(this.tags)
             },
             addTag() {
                 this.tags.push('') // 通过操作数组来增加空标签

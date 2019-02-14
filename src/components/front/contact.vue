@@ -1,18 +1,21 @@
 <template>
     <div class="contact">
-        <a href="#callMe" class="title animated bounceIn">
+        <div class="content-inner">
+            <a href="#callMe" class="title animated bounceIn">
             <p id="callMe" class="headline">
                 Contact me
             </p>
-        </a>
-        <div class="email animated fadeIn">
-            <input v-model="subject" type="text" placeholder="邮件主题">
-            <input v-model="address" type="text" placeholder="邮箱">
-            <textarea v-model="content" placeholder="想说的话..." spellcheck="false" />
-            <button class="sendEmail" :disabled="isSending" @click="send">
-            <span>{{ isSending ? '发送中...' : '确认' }}</span>
-          </button>
+            </a>
+            <div class="email animated fadeIn">
+                <input v-model="subject" type="text" placeholder="邮件主题">
+                <input v-model="address" type="text" placeholder="邮箱">
+                <textarea v-model="content" placeholder="想说的话..." spellcheck="false" />
+                <button class="sendEmail" :disabled="isSending" @click="send">
+                <span>{{ isSending ? '发送中...' : '确认' }}</span>
+            </button>
+            </div>
         </div>
+        
     </div>
 </template>
 
@@ -79,9 +82,10 @@
         min-height: 30rem;
         background: rgba(55, 57, 65, 0.2);
         padding: 2rem 1rem 2rem;
+        .content-inner {
+             padding-top: 3.125rem;
+        }
         .title {
-            padding-top: 3.125rem;
-            padding-bottom: 3.125rem;
             p {
                 width: 13rem;
             }

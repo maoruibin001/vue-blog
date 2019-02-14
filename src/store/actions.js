@@ -69,16 +69,17 @@ export default {
   }, payload) {
     commit('moreArticle_toggle', true)
     const startTime = beginLoading(commit, payload.add)
-    if (payload.value) {
+    if (payload.tag) {
       commit('isLoading_toggle', false)
     }
+
     return Vue.http.get('/api/articles', {
         params: {
-          payload
+          ...payload
         }
       })
-      .then(response => response.json())
-      .then(articles => {
+      .then( res => {
+        let articles  = res.data || []
         if (articles.length === 0) {
           commit('moreArticle_toggle', false)
           commit('noMore_toggle', true)
@@ -106,6 +107,7 @@ export default {
     }
     document.title = '加载中...'
     return Vue.http.get('/api/article/' + aid)
+
       .then(response => {
         commit('set_article', response.data)
         commit('set_headline', {
@@ -192,12 +194,12 @@ export default {
     document.title = '搜索中...'
     commit('moreArticle_toggle', true)
     const startTime = beginLoading(commit, payload.add)
-    return Vue.http.get('/api/someArticles', {
+    return Vue.http.get('/api/someArticles?key='+(payload.value || ""), {
         params: {
           payload
         }
       })
-      .then(response => response.json())
+      .then(response => response.data)
       .then(articles => {
         if (articles.length === 0) {
           commit('moreArticle_toggle', false)
@@ -245,12 +247,12 @@ export default {
   getAllComments({
     commit
   }, payload) {
-    return Vue.http.get('/api/comments', {
-        params: {
-          payload
-        }
+    return Vue.http.get('/api/comments?aid=' + payload.aid, {
+        // params: {
+        //   payload
+        // }
       })
-      .then(response => response.json())
+      .then(response => response.data && response.data.comments)
       .then(comments => {
         commit('set_comments', comments)
       }).catch((err) => {
@@ -260,8 +262,19 @@ export default {
   updateLike({
     commit
   }, payload) {
-    return Vue.http.patch('/api/comments/' + payload.id, {
-        option: payload.option
+    return Vue.http.patch('/api/comments/' + payload.aid + '/' + payload.cid, {
+        like: payload.like,
+        addLike: payload.addLike
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  },
+  deleteComment({
+    commit
+  }, payload) {
+    return Vue.http.delete('/api/comments/' + payload.aid + '/' + payload.cid, {
+      body: payload.address
       })
       .catch((err) => {
         console.log(err)

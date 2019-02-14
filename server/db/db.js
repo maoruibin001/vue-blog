@@ -67,7 +67,7 @@ const initialize = () => {
         if (err) {
             console.log(err)
             console.log('initialize failed')
-        } else if (doc.length) {
+        } else if (!doc.length) {
             const salt = rand(160, 36)
             // 第一次创建站长账户
             new Models['User']({name: 'boss', password: sha1('123456' + salt), salt: salt}).save()

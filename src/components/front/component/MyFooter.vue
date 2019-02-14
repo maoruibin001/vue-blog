@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <a href="https://segmentfault.com/u/fatdong1" class="iconfont icon-iconsf" />
-    <a class="iconfont icon-github" href="https://github.com/FatDong1" />
-    <a href="http://www.facebook.com/fatdong1" class="iconfont icon-cion15" />
-    <p>粤ICP备18603054239号</p>
+  <div class="footer">
+    <!-- <a href="https://segmentfault.com/u/fatdong1" class="iconfont icon-iconsf" /> -->
+    <!-- <a href="http://www.facebook.com/fatdong1" class="iconfont icon-cion15" /> -->
+    <p>qq号：595123108 <a class="iconfont icon-github" href="https://github.com/maoruibin001" /></p>
     <p>
       Copyright @ 2019 Powered by Vue. |
       <router-link :to="{name: 'login'}" tag="span" class="login">

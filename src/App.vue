@@ -2,7 +2,7 @@
     <div id="app">
         <fire-canvas class="fire" />
         <router-view />
-        <spinner />
+        <!-- <spinner /> -->
         <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
             <dialog-box v-if="dialog.show" />
         </transition>

@@ -34,12 +34,12 @@
             </router-link>
         </div>
         <spinner v-show="loadMore" class="loading" />
-        <p v-if="!loadMore" v-show="!noMore" class="noMore animated fadeIn">
+        <!-- <p v-if="!loadMore" v-show="!noMore" class="noMore animated fadeIn">
             下拉加载更多
-        </p>
-        <p v-if="noMore" class="noMore animated fadeIn">
+        </p> -->
+        <!-- <p v-if="noMore" class="noMore animated fadeIn">
             没啦没啦，别扯了
-        </p>
+        </p> -->
     </div>
 </template>
 

@@ -28,6 +28,9 @@ export function formatDate (date, options = {}) {
     const minutes = String(d.getMinutes()).padStart(2, '0')
     const hours = String(d.getHours()).padStart(2, '0')
     const seconds = String(d.getSeconds()).padStart(2, '0')
+
+    const month = String(d.getMonth() + 1).padStart(2, "0")
+    const day = String(d.getDate()).padStart(2, "0")
     const yRetList = [{
         name: 'Y',
         value: '年',
@@ -36,12 +39,12 @@ export function formatDate (date, options = {}) {
     {
         name: 'M',
         value: '月',
-        link: d.getMonth() + 1
+        link: month
     },
     {
         name: 'D',
         value: '日',
-        link: d.getDate()
+        link: day
     }
     ]
     const hRetList = [{

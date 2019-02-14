@@ -180,7 +180,7 @@ export default {
 <style scoped>
     #particle {
         position: fixed;
-        background: #000;
+        background: #012;
         z-index: -1;
     }
 </style>

@@ -74,7 +74,7 @@
             } else if (to.params.index === this.articles.length - 1) {
                 this.prePage = to.params.index - 1
                 this.getAllArticles({
-                    value: this.curTag,
+                    tag: this.curTag,
                     add: true,
                     page: ++to.params.page
                 })
@@ -110,7 +110,7 @@
                 } else if (index === this.articles.length - 1) { // 加载更多文章
                     this.prePage = index - 1
                     this.getAllArticles({
-                        value: this.curTag,
+                        tag: this.curTag,
                         add: true,
                         page: ++page
                     })

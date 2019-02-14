@@ -13,7 +13,7 @@
         </div>
         <div class="allComments">
             <div class="summary">
-                <p>评论数 {{ comments.length }}</p>
+                <p>评论数 {{ comments.count }}</p>
                 <p>
                     <span @click="getAllComments({id: $route.params.id})">
                     最早
@@ -30,6 +30,7 @@
                 <div id="info" :class="comment.imgName">
                     <p class="commentName">
                         #{{ index + 1 }} <span>{{ comment.name }}</span>
+                        <span class="delete" @click='removeComment(comment.aid, comment.cid, comment.address)'>删除</span>
                     </p>
                     <p class="text">
                         {{ comment.content }}
@@ -43,7 +44,7 @@
                         <i class="iconfont icon-huifu" />回复
                       </span>
                         </a>
-                        <p @click="addLike(comment._id, index)">
+                        <p @click="addLike(comment.aid, comment.cid, index, comment.like)">
                             <i class="iconfont icon-like" :class="{activeLike: likeArr.indexOf(index) !== -1}" /> {{ comment.like }}
                         </p>
                     </div>
@@ -75,7 +76,7 @@
         },
         created() {
             this.getAllComments({
-                id: this.$route.params.id
+                aid: this.$route.params.id
             })
             if (localStorage.token && this.user.name) {
                 this.imgName = 'me'
@@ -98,7 +99,7 @@
             }
         },
         methods: {
-            ...mapActions(['summitComment', 'getAllComments', 'updateLike']),
+            ...mapActions(['summitComment', 'getAllComments', 'updateLike', 'deleteComment']),
             ...mapMutations(['set_dialog']),
             summit() {
                 const re = /^[\w_-]+@[\w_-]+\.[\w\\.]+$/
@@ -154,13 +155,13 @@
                     name: this.name,
                     content: this.content,
                     address: this.address,
-                    articleId: this.$route.params.id,
+                    aid: +this.$route.params.id,
                     curPath: this.$route.fullPath
                 }).then(() => {
                     this.content = ''
                     this.summitFlag = false
                     this.getAllComments({
-                        id: this.$route.params.id
+                        aid: this.$route.params.id
                     })
                 }).catch((err) => {
                     this.set_dialog({
@@ -176,16 +177,24 @@
                 this.content = '@' + name + ': '
                 this.$refs.textBox.focus()
             },
-            addLike(id, index) {
+            removeComment(aid, cid, address) {
+                this.deleteComment({aid, cid, address}).then(() => {
+                    this.getAllComments({
+                        aid: this.$route.params.id
+                    })
+                })
+            },
+            addLike(id, cid, index, like=0) {
                 const i = this.likeArr.indexOf(index)
                 if (i === -1) {
                     this.updateLike({
-                        id: id,
-                        option: 'add'
+                        aid: id,
+                        cid: cid,
+                        addLike: 1
                     }).then(() => {
                         this.likeArr.push(index)
                         this.getAllComments({
-                            id: this.$route.params.id
+                            aid: this.$route.params.id
                         })
                         localStorage[this.$route.params.id] = JSON.stringify(this.likeArr) // 记录访问者的点赞情况
                     }).catch((err) => {
@@ -193,12 +202,13 @@
                     })
                 } else {
                     this.updateLike({
-                        id: id,
-                        option: 'drop'
+                        aid: id,
+                        cid: cid,
+                        addLike: 0
                     }).then(() => {
                         this.likeArr.splice(i, 1)
                         this.getAllComments({
-                            id: this.$route.params.id
+                            aid: this.$route.params.id
                         })
                         localStorage[this.$route.params.id] = JSON.stringify(this.likeArr) // 记录访问者的点赞情况
                     }).catch((err) => {
@@ -215,7 +225,7 @@
                     this.content = ''
                 }
                 this.getAllComments({
-                    id: to.params.id
+                    aid: to.params.id
                 })
             }
         }
@@ -312,8 +322,13 @@
                     .commentName {
                         font-size: 1.125rem;
                         margin-bottom: 0.3125rem;
+                        position:relative;
                         span {
                             color: darkturquoise;
+                        }
+                        .delete {
+                            float: right;
+                            cursor: pointer;
                         }
                     }
                     .text {
