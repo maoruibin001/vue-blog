@@ -4,9 +4,9 @@
       <i class="iconfont icon-icon69" />
       <div>
         <input
-          v-model="name"
+          v-model="phone"
           type="text"
-          placeholder="请输入你的账号"
+          placeholder="请输入你的手机号"
         >
         <i class="iconfont icon-zhanghu" />
       </div>
@@ -20,7 +20,7 @@
         <i class="iconfont icon-yuechi" />
       </div>
       <p>{{ info }}</p>
-      <button @click="confirm(name, password)">
+      <button @click="confirm(phone, password)">
         <span>登录</span>
       </button>
     </div>
@@ -32,7 +32,7 @@ import { mapActions, mapMutations }       from 'vuex'
 export default {
     data () {
         return {
-            name: '',
+            phone: '',
             password: '',
             info: ''
         }
@@ -40,8 +40,8 @@ export default {
     methods: {
         ...mapActions(['login']),
         ...mapMutations(['set_user']),
-        confirm (name, password) {
-            this.login({ name: name, password: password }).then((res) => {
+        confirm (phone, password) {
+            this.login({ phone: phone, password: password }).then((res) => {
                 this.info = '正在登录中...'
                 this.set_user(res.data)
                 this.$router.push({ name: 'posts' })

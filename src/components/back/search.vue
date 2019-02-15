@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <div class="search">
-            <input v-model="text" type="text" :placeholder="tip" onfocus="this.placeholder=''" @keydown.enter="searchArticles({key: picked, value: text, page: page})">
-            <i class="iconfont icon-search" @click="searchArticles({key: picked, value: text, page: page})" />
+            <input v-model="text" type="text" :placeholder="tip" onfocus="this.placeholder=''" @keydown.enter="searchArticles({key: text, page: page})">
+            <i class="iconfont icon-search" @click="searchArticles({key: text, page: page})" />
         </div>
         <!-- <div class="searchString">
             搜索匹配：
@@ -47,19 +47,16 @@
             return {
                 picked: 'title',
                 text: '',
-                page: 1
-            }
-        },
-        computed: {
-            tip() {
-                if (this.picked === 'title') return '请输入标题的部分内容'
-                if (this.picked === 'tags') return '请输入完整的标签，多个标签空格隔开'
-                if (this.picked === 'date') return '检索格式： 2017-04-01'
-                return ''
+                page: 1,
+                tip: '请输入标题、内容或日期'
             }
         },
         created() {
             this.set_all_articles({})
+            this.searchArticles({
+                key: this.text,
+                pageNo: this.page
+            })
         },
         methods: {
             ...mapActions(['searchArticles']),
@@ -67,9 +64,9 @@
             nextPage() {
                 this.page++
                 this.searchArticles({
-                    key: this.picked,
-                    value: this.text,
-                    page: this.page
+                    // key: this.picked,
+                    key: this.text,
+                    pageNo: this.page
                 })
             },
             prePage() {
@@ -78,9 +75,9 @@
                 } else {
                     this.page--
                     this.searchArticles({
-                        key: this.picked,
-                        value: this.text,
-                        page: this.page
+                        // key: this.picked,
+                        key: this.text,
+                        pageNo: this.page
                     })
                 }
             }

@@ -43,7 +43,7 @@ export default {
     update_post_content: (state, content) => {
         state.article.content = content
     },
-    set_article: (state, article) => {
+    set_article: (state, article={}) => {
         state.article = article
     },
     set_all_articles: (state, articles) => {

@@ -18,11 +18,13 @@
             <textarea v-if="isMarked" id="editor" v-model="mdContent" v-focus spellcheck="false" @keydown.once.ctrl.13="saveDraft($route.query.aid)" />
             <div v-if="!isMarked" v-focus class="preview animated fadeIn" tabIndex="1" v-html="mdHtml" />
         </div>
-        <button class="publish" @click="saveArticle($route.query.aid)">
-          <span>发布文章</span>
-        </button>
+       
         <button class="draft" @click="saveDraft($route.query.aid)">
           <span>存为草稿</span>
+        </button>
+
+         <button class="publish" @click="saveArticle($route.query.aid)">
+          <span>发布文章</span>
         </button>
     </div>
 </template>
@@ -248,8 +250,8 @@
     .publish {
         width: 6.25rem;
         position: fixed;
-        left: 1rem;
-        bottom: 32.5rem;
+        right: 1rem;
+        bottom: 2.5rem;
         background: rgb(129, 216, 208);
         color: #000;
     }

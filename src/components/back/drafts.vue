@@ -11,7 +11,8 @@
 <script>
     import {
         mapActions,
-        mapState
+        mapState,
+        mapMutations
     } from 'vuex'
     import ArticleContent from './component/ArticleContent'
     export default {
@@ -21,18 +22,19 @@
             }
         },
         created() {
+            this.set_all_articles([])
             this.getAllDrafts({
-                page: this.page,
+                pageNo: this.page,
                 // limit: 8
             })
         },
         methods: {
+            ...mapMutations(['set_all_articles']),
             ...mapActions(['getAllDrafts']),
             nextPage() {
                 this.page++
                     this.getAllDrafts({
-                        page: this.page,
-                        limit: 8
+                        pageNo: this.page,
                     })
             },
             prePage() {
@@ -41,8 +43,7 @@
                 } else {
                     this.page--
                         this.getAllDrafts({
-                            page: this.page,
-                            limit: 8
+                            pageNo: this.page,
                         })
                 }
             }

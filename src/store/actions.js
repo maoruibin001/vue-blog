@@ -15,7 +15,7 @@ export default {
   login({
     commit
   }, payload) {
-    return Vue.http.post('/api/login', payload).catch((err) => {
+    return Vue.http.post('/api/login', payload).catch((err) => {;
       console.log(err)
     })
   },
@@ -39,7 +39,7 @@ export default {
   }, aid) {
     commit('isSaving_toggle', false)
     if (aid) {
-      return Vue.http.patch('/api/article/' + aid, state.article)
+      return Vue.http.patch('/api/articles/' + aid, state.article)
         .then(() => {
           commit('isSaving_toggle', true)
           router.push({
@@ -79,12 +79,14 @@ export default {
         }
       })
       .then( res => {
-        let articles  = res.data || []
+        let data = res.data || {}
+        commit('noMore_toggle', data.isEnd === 1)
+        let articles  = data.articles || []
         if (articles.length === 0) {
           commit('moreArticle_toggle', false)
-          commit('noMore_toggle', true)
+          // commit('noMore_toggle', true)
         } else {
-          commit('noMore_toggle', false)
+          // commit('noMore_toggle', false)
         }
         if (payload.add) {
           commit('add_articles', articles)
@@ -106,10 +108,10 @@ export default {
       commit('isLoading_toggle', false)
     }
     document.title = '加载中...'
-    return Vue.http.get('/api/article/' + aid)
+    return Vue.http.get('/api/articles/' + aid)
 
       .then(response => {
-        commit('set_article', response.data)
+        commit('set_article', response.data || {})
         commit('set_headline', {
           content: state.article.title,
           animation: 'animated rotateIn'
@@ -123,15 +125,13 @@ export default {
   delArticle({
     dispatch
   }, payload) {
-    return Vue.http.delete('/api/article/' + payload.aid)
+    return Vue.http.delete('/api/articles/' + payload.aid)
       .then(() => {
         if (payload.route.name === 'posts') dispatch('getAllArticles', {
           page: payload.page,
-          limit: 8
         })
         if (payload.route.name === 'drafts') dispatch('getAllDrafts', {
           page: payload.page,
-          limit: 8
         })
         if (payload.route.name === 'search') router.push({
           name: 'posts'
@@ -147,7 +147,7 @@ export default {
   }, aid) {
     // 可能要改saveArticle
     if (aid) {
-      return Vue.http.patch('/api/draft/' + aid, state.article)
+      return Vue.http.patch('/api/drafts/' + aid, state.article)
         .then(() => {
           commit('isSaving_toggle', true)
           router.push({
@@ -177,11 +177,13 @@ export default {
   }, payload) {
     return Vue.http.get('/api/drafts', {
         params: {
-          payload
+          ...payload
         }
       })
-      .then(response => response.json())
-      .then(articles => {
+      .then(response => response.data)
+      .then(data => {
+        let articles = data.articles || []
+        commit('noMore_toggle', data.isEnd === 1)
         commit('set_all_articles', articles)
       }).catch((err) => {
         console.log(err)
@@ -194,18 +196,21 @@ export default {
     document.title = '搜索中...'
     commit('moreArticle_toggle', true)
     const startTime = beginLoading(commit, payload.add)
-    return Vue.http.get('/api/someArticles?key='+(payload.value || ""), {
+    return Vue.http.get('/api/someArticles', {
         params: {
-          payload
+          ...payload,
+          isAll: 1
         }
       })
-      .then(response => response.data)
-      .then(articles => {
+      .then(response => (response.data || {}))
+      .then(data => {
+        let articles = data.articles || []
+        commit('noMore_toggle', data.isEnd === 1)
         if (articles.length === 0) {
           commit('moreArticle_toggle', false)
-          commit('noMore_toggle', true)
+          // commit('noMore_toggle', true)
         } else {
-          commit('noMore_toggle', false)
+          // commit('noMore_toggle', false)
         }
         if (payload.add) {
           commit('add_articles', articles)

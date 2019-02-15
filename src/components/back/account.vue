@@ -3,8 +3,12 @@
         <p class="icon">
             <i class="iconfont icon-icon69" />
         </p>
+         <div>
+            <input v-model="name" type="text" placeholder="请输入姓名">
+            <i class="iconfont icon-zhanghu" />
+        </div>
         <div>
-            <input v-model="name" type="text" placeholder="请输入新的用户名">
+            <input v-model="phone" type="text" placeholder="请输入手机号码">
             <i class="iconfont icon-zhanghu" />
         </div>
         <div>
@@ -21,7 +25,7 @@
             </p>
         </transition>
         <button @click="reset">
-          <span>确认修改</span>
+          <span>确认新增</span>
         </button>
     </div>
 </template>
@@ -38,6 +42,7 @@
         data() {
             return {
                 msg: 'haha',
+                phone: '',
                 name: '',
                 password: '',
                 repassword: '',
@@ -49,24 +54,25 @@
         },
         methods: {
             ...mapActions(['resetUser']),
-            checkName() {
-                if (this.name.length > 5) {
-                    this.msg = '请输入合适长度的用户名'
-                }
-            },
+            // checkPhone() {
+            //     if (this.phone.length > 20) {
+            //         this.msg = '请输入合适长度的用户名'
+            //     }
+            // },
             reset() {
                 if (this.repassword === this.password) {
                     this.resetUser({
-                        id: this.user.id,
-                        name: this.name,
-                        password: this.password
+                        aid: this.user.id,
+                        phone: this.phone,
+                        password: this.password,
+                        name: this.name
                     })
                 }
             }
         },
         watch: {
-            name: debounce(function() {
-                if (this.name.length > 5) {
+            phone: debounce(function() {
+                if (this.phone.length > 20) {
                     this.msg = '请输入合适长度的用户名'
                     this.show = true
                 } else {
@@ -75,8 +81,8 @@
                 }
             }, 500),
             password: debounce(function() {
-                if (this.password.length < 6) {
-                    this.msg = '请输入长度大于6位的密码'
+                if (this.password.length < 3) {
+                    this.msg = '请输入长度大于3位的密码'
                     this.show = true
                 } else {
                     this.msg = ''
@@ -100,7 +106,7 @@
     .account {
         position: relative;
         margin: 5rem auto 2rem;
-        height: 25rem;
+        height: 28rem;
         p.icon {
             width: calc(100% - 6.25rem);
             text-align: center;

@@ -29,15 +29,15 @@
         },
         created() {
             this.searchArticles({
-                key: 'title',
-                value: this.$route.params.text
+                // key: 'title',
+                key: this.$route.params.text
             })
             this.$route.params.text = ""
         },
         beforeRouteUpdate(to, from, next) {
             this.searchArticles({
-                    key: 'title',
-                    value: to.params.text
+                    // key: 'title',
+                    key: to.params.text
                 })
             // if (to.params.text) {
             //     this.searchArticles({
@@ -69,10 +69,10 @@
                     const clientHeight = window.innerHeight
                     if (totalHeight - scrollTop - clientHeight === 0 && this.moreArticle) {
                         this.searchArticles({
-                            key: 'title',
-                            value: this.$route.params.text,
+                            // key: 'title',
+                            key: this.$route.params.text,
                             add: true,
-                            page: ++this.page
+                            pageNo: ++this.page
                         })
                     }
                     if (!this.moreArticle) {

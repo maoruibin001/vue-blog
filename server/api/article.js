@@ -18,7 +18,7 @@ router.post('/api/article', confirmToken, (req, res) => {
 })
 
 // 获取某篇文章
-router.get('/api/article/:aid', (req, res) => {
+router.get('/api/articles/:aid', (req, res) => {
     db.Article.findOne({aid: req.params.aid}, (err, doc) => {
         if (err) {
             console.log(err)
@@ -29,7 +29,7 @@ router.get('/api/article/:aid', (req, res) => {
 })
 
 // 删除文章并删除文章下面的评论
-router.delete('/api/article/:aid', confirmToken, (req, res) => {
+router.delete('/api/articles/:aid', confirmToken, (req, res) => {
     db.Article.remove({aid: req.params.aid}, (err, data) => {
         if (err) {
             console.log(err)
@@ -47,7 +47,7 @@ router.delete('/api/article/:aid', confirmToken, (req, res) => {
 })
 
 // 更新文章
-router.patch('/api/article/:aid', confirmToken, (req, res) => {
+router.patch('/api/articles/:aid', confirmToken, (req, res) => {
     const aid = req.params.aid
     const article = {
         title: req.body.title,

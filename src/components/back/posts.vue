@@ -11,35 +11,35 @@
 <script>
     import {
         mapActions,
-        mapState
+        mapState,
+mapMutations
     } from 'vuex'
     import ArticleContent from './component/ArticleContent'
     export default {
         data() {
             return {
-                page: 1
+                pageNo: 1
             }
         },
         created() {
+            this.set_all_articles([])
             this.getAllArticles({
-                page: this.page,
-                limit: 8
+                pageNo: this.pageNo,
             })
         },
         methods: {
+            ...mapMutations(['set_all_articles']),
             ...mapActions(['getAllArticles']),
             nextPage() {
-                this.page++
+                this.pageNo++
                     this.getAllArticles({
-                        page: this.page,
-                        limit: 8
+                        pageNo: this.pageNo,
                     })
             },
             prePage() {
-                this.page--
+                this.pageNo--
                     this.getAllArticles({
-                        page: this.page,
-                        limit: 8
+                        pageNo: this.pageNo
                     })
             }
         },

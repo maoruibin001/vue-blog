@@ -23,14 +23,14 @@
         </tbody>
         <tfoot>
             <tr>
-                <td>
-                    <span @click="prePage" v-if='page > 1'>上一页</span>
+                <td @click="prePage">
+                    <span v-if='pageNo > 1'>上一页</span>
                 </td>
                 <td colspan="2">
-                    第 {{ page }} 页
+                    第 {{ pageNo }} 页
                 </td>
-                <td>
-                    <span @click="nextPage" v-if='!noMore'>下一页</span>
+                <td @click="nextPage">
+                    <span v-if='!noMore'>下一页</span>
                 </td>
             </tr>
         </tfoot>
@@ -46,7 +46,7 @@
     export default {
         data() {
             return {
-                page: 1
+                pageNo: 1
             }
         },
         computed: {
@@ -56,14 +56,14 @@
             ...mapActions(['delArticle']),
             ...mapMutations(['set_dialog']),
             nextPage() {
-                this.page++
+                this.pageNo++
                     this.$emit('addPage') // 传递给父组件
             },
             prePage() {
-                if (!(this.page - 1)) {
+                if (!(this.pageNo - 1)) {
                     alert('已经到第一页咯')
                 } else {
-                    this.page--
+                    this.pageNo--
                     this.$emit('dropPage') // 传递给父组件
                 }
             },
@@ -79,7 +79,7 @@
                 }).then(() => {
                     this.delArticle({
                         aid: aid,
-                        page: this.page,
+                        pageNo: this.pageNo,
                         route: this.$route
                     })
                 }).catch((err) => {
