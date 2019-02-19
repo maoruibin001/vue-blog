@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Store from '../store'
 import Router from 'vue-router'
 
-const index = resolve => require(['@/components/front/Index'], resolve)
+const Index = resolve => require(['@/components/front/Index'], resolve)
 const AboutMe = resolve => require(['@/components/front/AboutMe'], resolve)
 const Home = resolve => require(['@/components/front/Home'], resolve)
 const Articles = resolve => require(['@/components/front/Articles'], resolve)
@@ -36,7 +36,7 @@ const router = new Router({
   routes: [{
       path: '/',
       redirect: 'home',
-      component: index,
+      component: Index,
       children: [{
           path: 'home',
           name: 'home',

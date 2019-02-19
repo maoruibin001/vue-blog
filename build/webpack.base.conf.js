@@ -27,6 +27,10 @@ module.exports = {
       'lib': resolve('src/lib'),
     }
   },
+  externals: {
+    'vue': 'Vue',
+    'vue-router': 'VueRouter'
+ },
   optimization: {
     splitChunks: {
       cacheGroups: {
