@@ -15,7 +15,7 @@
                     <i class="iconfont icon-huifu" />{{ article.comment_n }}
                 </a>
             </div>
-            <article-list class="list animated fadeIn" />
+            <article-list class="list animated fadeIn"  v-if='showTab'/>
             <div class="content animated fadeIn" v-html="mdHtml" />
             <div class="indexes animated fadeIn">
                 <div class="last animated fadeIn">
@@ -58,10 +58,12 @@
             return {
                 prePage: 0,
                 nextPage: 0,
-                count: 0
+                count: 0,
+                showTab: true
             }
         },
         created() {
+            window.addEventListener('scroll', this.handleScroll)
             this.getArticle(this.$route.params.id)
             this.initPage()
         },
@@ -101,6 +103,11 @@
         methods: {
             ...mapActions(['getArticle', 'getAllArticles']),
             mark: marked,
+            handleScroll() {
+                let comment = document.querySelector('.content .comment')
+                let pos =  comment.getBoundingClientRect();
+                this.showTab = pos.top > 100
+            },
             initPage() {
                 const index = this.$route.params.index - 0
                 let page = this.$route.params.page - 0 || 1

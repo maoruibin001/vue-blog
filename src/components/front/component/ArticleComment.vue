@@ -15,13 +15,13 @@
             <div class="summary">
                 <p>评论数 {{ comments.length }}</p>
                 <p>
-                    <span @click="sort('date', -1)">
+                    <span :class="activeIndex===1 ? ['active'] : ''" @click="sort(-1, 1)">
                     最早
                   </span>|
-                    <span @click="sort('date', 1)">
+                    <span :class="activeIndex===2 ? ['active'] : ''" @click="sort(1, 2)">
                     最新
                   </span>|
-                    <span @click="sort('like', 1)">
+                    <span :class="activeIndex===3 ? ['active'] : ''"  @click="sort(1, 3)">
                     最热
                   </span>
                 </p>
@@ -45,7 +45,7 @@
                       </span>
                         </a>
                         <p @click="addLike(comment.aid, comment.cid, index, comment.like)">
-                            <i class="iconfont icon-like" :class="{activeLike: likeArr.indexOf(index) !== -1}" /> {{ comment.like }}
+                            <i class="iconfont icon-like" :class="{activeLike: likeArr.indexOf(comment.cid) !== -1}" /> {{ comment.like }}
                         </p>
                     </div>
                     <img :src="'../../../../static/' + comment.imgName + '.jpg'">
@@ -71,7 +71,8 @@
                 address: '',
                 content: '',
                 imgName: '',
-                summitFlag: false
+                summitFlag: false,
+                activeIndex: 1
             }
         },
         created() {
@@ -101,7 +102,17 @@
         methods: {
             ...mapActions(['summitComment', 'getAllComments', 'updateLike', 'deleteComment']),
             ...mapMutations(['set_dialog', 'set_comments']),
-            sort(key, direct) {
+            sort(direct, activeIndex=1) {
+                this.activeIndex = activeIndex
+                let key = ''
+                switch(activeIndex) {
+                    case 1 :
+                    case 2 :
+                        key = 'date'
+                        break
+                    case 3 :
+                        key = 'like'
+                }
                 let comments = this.comments.concat([])
                 comments.sort((e1, e2) => direct * (e2[key] - e1[key]))
                 this.set_comments(comments)
@@ -190,14 +201,14 @@
                 })
             },
             addLike(id, cid, index, like=0) {
-                const i = this.likeArr.indexOf(index)
+                const i = this.likeArr.indexOf(cid)
                 if (i === -1) {
                     this.updateLike({
                         aid: id,
                         cid: cid,
                         addLike: 1
                     }).then(() => {
-                        this.likeArr.push(index)
+                        this.likeArr.push(cid)
                         this.getAllComments({
                             aid: this.$route.params.id
                         })
@@ -309,6 +320,9 @@
                     &:hover {
                         color: darkturquoise;
                     }
+                }
+                .active {
+                    color: darkturquoise;
                 }
             }
             .comments {
