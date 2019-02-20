@@ -26,9 +26,9 @@
             DialogBox
         },
         mounted() {
-            window.onresize = debounce(() => {
-                window.location.reload()
-            }, 200)
+            // window.onresize = debounce(() => {
+            //     window.location.reload()
+            // }, 200)
             document.addEventListener('visibilitychange', this.changeTitle, false)
         },
         computed: {
