@@ -148,7 +148,7 @@
                 white-space: pre-wrap;
                 word-wrap: break-word;
                 width: 80%;
-                margin: 0 auto;
+                margin: 0 200px;
             }
             .appendInfo {
                 text-align: right;

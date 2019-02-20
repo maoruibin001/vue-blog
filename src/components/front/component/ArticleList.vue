@@ -80,6 +80,7 @@
         position: absolute;
         max-width: 13.75rem;
         z-index: 100;
+        width: 150px;
         i.iconfont {
             margin: -3px;
         }
