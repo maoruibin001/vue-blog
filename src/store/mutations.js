@@ -53,7 +53,7 @@ export default {
         state.articles = state.articles.concat(articles)
     },
     // comment
-    set_comments: (state, comments) => {
+    set_comments: (state, comments = []) => {
         state.comments = comments
     },
     // 对话框
