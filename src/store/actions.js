@@ -89,10 +89,10 @@ export default {
           // commit('noMore_toggle', false)
         }
         if (payload.add) {
-          commit('add_articles', articles)
+          commit('add_articles', articles || {})
           endLoading(commit, startTime, 'loadMore_toggle')
         } else {
-          commit('set_all_articles', articles)
+          commit('set_all_articles', articles || [])
           endLoading(commit, startTime, 'isLoading_toggle')
         }
       }).catch((err) => {
@@ -184,7 +184,7 @@ export default {
       .then(data => {
         let articles = data.articles || []
         commit('noMore_toggle', data.isEnd === 1)
-        commit('set_all_articles', articles)
+        commit('set_all_articles', articles || [])
       }).catch((err) => {
         console.log(err)
       })
@@ -259,7 +259,7 @@ export default {
       })
       .then(response => response.data && response.data.comments)
       .then(comments => {
-        commit('set_comments', comments)
+        commit('set_comments', comments || [])
       }).catch((err) => {
         console.log(err)
       })
