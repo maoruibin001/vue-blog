@@ -147,7 +147,7 @@ export default {
   }, aid) {
     // 可能要改saveArticle
     if (aid) {
-      return Vue.http.patch('/api/drafts/' + aid, state.article)
+      return Vue.http.put('/api/drafts/' + aid, state.article)
         .then(() => {
           commit('isSaving_toggle', true)
           router.push({
@@ -267,7 +267,7 @@ export default {
   updateLike({
     commit
   }, payload) {
-    return Vue.http.patch('/api/comments/' + payload.aid + '/' + payload.cid, {
+    return Vue.http.put('/api/comments/' + payload.aid + '/' + payload.cid, {
         like: payload.like,
         addLike: payload.addLike
       })
