@@ -15,13 +15,13 @@
             <div class="summary">
                 <p>评论数 {{ comments.length }}</p>
                 <p>
-                    <span @click="getAllComments({aid: $route.params.id})">
+                    <span @click="sort('date', -1)">
                     最早
                   </span>|
-                    <span @click="getAllComments({aid: $route.params.id, sort: 'date'})">
+                    <span @click="sort('date', 1)">
                     最新
                   </span>|
-                    <span @click="getAllComments({aid: $route.params.id, sort: 'like'})">
+                    <span @click="sort('like', 1)">
                     最热
                   </span>
                 </p>
@@ -30,7 +30,7 @@
                 <div id="info" :class="comment.imgName">
                     <p class="commentName">
                         #{{ index + 1 }} <span>{{ comment.name }}</span>
-                        <span class="delete" @click='removeComment(comment.aid, comment.cid, comment.address)'>删除</span>
+                        <!-- <span class="delete" @click='removeComment(comment.aid, comment.cid, comment.address, index)'>删除</span> -->
                     </p>
                     <p class="text">
                         {{ comment.content }}
@@ -100,7 +100,12 @@
         },
         methods: {
             ...mapActions(['summitComment', 'getAllComments', 'updateLike', 'deleteComment']),
-            ...mapMutations(['set_dialog']),
+            ...mapMutations(['set_dialog', 'set_comments']),
+            sort(key, direct) {
+                let comments = this.comments.concat([])
+                comments.sort((e1, e2) => direct * (e2[key] - e1[key]))
+                this.set_comments(comments)
+            },
             summit() {
                 const re = /^[\w_-]+@[\w_-]+\.[\w\\.]+$/
                 if (!this.name || !this.content) {
