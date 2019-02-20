@@ -25,7 +25,7 @@
     export default {
         data() {
             return {
-                showList: true
+                showList: false
             }
         },
         mounted() {
@@ -61,6 +61,11 @@
                 if (to.name === 'article' && to.hash === '#article') {
                     this.$refs.emptyBox.style.top = 2 + 'rem'
                 }
+            },
+            articleList(val) {
+                if (val && val.length > 0) {
+                    this.showList = true;
+                }
             }
         }
     }
@@ -74,6 +79,9 @@
         text-align: left;
         position: absolute;
         max-width: 13.75rem;
+        i.iconfont {
+            margin: -3px;
+        }
         i.icon-mulu {
             position: absolute;
             left: 1.25rem;

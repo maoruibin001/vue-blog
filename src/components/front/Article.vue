@@ -147,6 +147,8 @@
                 font-size: 1rem;
                 white-space: pre-wrap;
                 word-wrap: break-word;
+                width: 80%;
+                margin: 0 auto;
             }
             .appendInfo {
                 text-align: right;
