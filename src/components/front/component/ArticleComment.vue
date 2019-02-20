@@ -15,13 +15,13 @@
             <div class="summary">
                 <p>评论数 {{ comments.length }}</p>
                 <p>
-                    <span @click="getAllComments({id: $route.params.id})">
+                    <span @click="getAllComments({aid: $route.params.id})">
                     最早
                   </span>|
-                    <span @click="getAllComments({id: $route.params.id, sort: 'date'})">
+                    <span @click="getAllComments({aid: $route.params.id, sort: 'date'})">
                     最新
                   </span>|
-                    <span @click="getAllComments({id: $route.params.id, sort: 'like'})">
+                    <span @click="getAllComments({aid: $route.params.id, sort: 'like'})">
                     最热
                   </span>
                 </p>

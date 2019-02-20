@@ -253,9 +253,9 @@ export default {
     commit
   }, payload) {
     return Vue.http.get('/api/comments?aid=' + payload.aid, {
-        // params: {
-        //   payload
-        // }
+        params: {
+          ...payload
+        }
       })
       .then(response => response.data && response.data.comments)
       .then(comments => {

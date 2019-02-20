@@ -79,6 +79,7 @@
         text-align: left;
         position: absolute;
         max-width: 13.75rem;
+        z-index: 100;
         i.iconfont {
             margin: -3px;
         }
