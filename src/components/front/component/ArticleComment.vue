@@ -13,7 +13,7 @@
         </div>
         <div class="allComments">
             <div class="summary">
-                <p>评论数 {{ comments.count }}</p>
+                <p>评论数 {{ comments.length }}</p>
                 <p>
                     <span @click="getAllComments({id: $route.params.id})">
                     最早
