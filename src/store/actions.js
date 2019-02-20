@@ -39,7 +39,7 @@ export default {
   }, aid) {
     commit('isSaving_toggle', false)
     if (aid) {
-      return Vue.http.patch('/api/articles/' + aid, state.article)
+      return Vue.http.put('/api/articles/' + aid, state.article)
         .then(() => {
           commit('isSaving_toggle', true)
           router.push({
