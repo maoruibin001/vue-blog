@@ -79,7 +79,7 @@
                 margin-top: 0.55rem;
                 margin-left: 0.625rem;
                 position: relative;
-                width: calc(45%-0.625rem);
+                // width: calc(45%-0.625rem);
                 input {
                     color: #fff;
                     outline: none;
