@@ -65,22 +65,8 @@ module.exports = {
         include: [resolve('src'), resolve('test')],
         sideEffects: false,
         options: {
-          "presets": [
-            "es2015",
-            ["env", { "modules": false }],
-            "stage-2"
-          ],
-          plugins: [
-            ['transform-runtime']
-          ],
-          comments: false,
           cacheDirectory: true
-
-          // presets: [['es2015', 'stage-2'],{modules: false}],
         }
-        // query: {
-        //   presets: ['es2015', 'stage-2']
-        // }
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
