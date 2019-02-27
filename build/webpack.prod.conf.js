@@ -10,10 +10,10 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var MiniCssExtractPlugin = require("mini-css-extract-plugin")
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-
 var env = config.build.env
 
 var webpackConfig = merge(baseWebpackConfig, {
+  mode: "production",
   module: {
     rules: utils.styleLoaders({
       // sourceMap: config.build.productionSourceMap,
@@ -26,19 +26,19 @@ var webpackConfig = merge(baseWebpackConfig, {
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
+  // optimization: {
+  //   // mode: 'none',
+  //   minimize: true,
+  //   providedExports: true,
+  //   usedExports: true,
+  //   sideEffects: true,
+  // },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env
     }),
     new UglifyJsPlugin(),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   },
-    //   sourceMap: true
-    // }),
-    // extract css into its own file
     new MiniCssExtractPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css')
     }),

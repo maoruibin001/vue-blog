@@ -3,21 +3,21 @@ var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-function resolve (dir) {
+
+function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
 module.exports = {
-  mode: 'none',
   entry: {
     app: './src/index.js'
   },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    publicPath: process.env.NODE_ENV === 'production' ?
+      config.build.assetsPublicPath :
+      config.dev.assetsPublicPath
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -30,7 +30,7 @@ module.exports = {
   externals: {
     'vue': 'Vue',
     'vue-router': 'VueRouter'
- },
+  },
   optimization: {
     splitChunks: {
       cacheGroups: {
@@ -63,9 +63,24 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test')],
-        query: {
-          presets: ['es2015', 'stage-2']
+        sideEffects: false,
+        options: {
+          "presets": [
+            "es2015",
+            ["env", { "modules": false }],
+            "stage-2"
+          ],
+          plugins: [
+            ['transform-runtime']
+          ],
+          comments: false,
+          cacheDirectory: true
+
+          // presets: [['es2015', 'stage-2'],{modules: false}],
         }
+        // query: {
+        //   presets: ['es2015', 'stage-2']
+        // }
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -88,5 +103,5 @@ module.exports = {
   plugins: [
     // make sure to include the plugin for the magic
     new VueLoaderPlugin()
-],
+  ],
 }
