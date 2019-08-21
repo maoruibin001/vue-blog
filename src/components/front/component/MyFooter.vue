@@ -3,13 +3,18 @@
     <!-- <a href="https://segmentfault.com/u/fatdong1" class="iconfont icon-iconsf" /> -->
     <!-- <a href="http://www.facebook.com/fatdong1" class="iconfont icon-cion15" /> -->
     <p>
-      qq号：595123108 <a class="iconfont icon-github"
-href="https://github.com/maoruibin001" />
+      qq号：595123108 <a
+        class="iconfont icon-github"
+        href="https://github.com/maoruibin001"
+      />
     </p>
     <p>
-      <a href="http://beian.miit.gov.cn/">Copyright @ 2019 Powered by Vue. |</a>
-      <router-link :to="{name: 'login'}"
-tag="span" class="login">
+      <a href="http://beian.miit.gov.cn/">备案号：蜀ICP备18008614号 |</a>
+      <router-link
+        :to="{name: 'login'}"
+        tag="span"
+        class="login"
+      >
         站长登录
       </router-link>
     </p>
