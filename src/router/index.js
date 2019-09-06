@@ -102,7 +102,7 @@ const router = new Router({
             component: posts,
             meta: {
                 requireAuth: true,
-                title: '博客文章'
+                title: '文章文章'
             }
         },
         {
@@ -120,7 +120,7 @@ const router = new Router({
             component: drafts,
             meta: {
                 requireAuth: true,
-                title: '博客草稿'
+                title: '文章草稿'
             }
         },
         {

@@ -1,15 +1,15 @@
 # vue-blog
 
-> Vue.js+Node.js+Mongodb+Express的前后端分离的个人博客
+> Vue.js+Node.js+Mongodb+Express的前后端分离的个人文章
 
-> 博客地址：www.maoruibin.xyz
+> 文章地址：www.maoruibin.xyz
 
 ## 主要技术构成
 前端主要技术栈为vue.js、vue-router、 vue-resource、 vuex
 
 后端主要技术栈为go、gin
 
-## 博客功能
+## 文章功能
 ### 前台页面
 - canvas粒子效果
 - 搜索文章
